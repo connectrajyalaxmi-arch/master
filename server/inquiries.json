@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1780386257725,
+    "companyName": "infosys",
+    "contactName": "Rajyalaxmi",
+    "email": "connectgprem@gmail.com",
+    "phone": "8789789809809",
+    "industry": "Healthcare",
+    "message": "",
+    "category": "Partnership",
+    "status": "under-review",
+    "createdAt": "2026-06-02T07:44:17.725Z"
+  },
+  {
+    "id": 1780386257939,
+    "companyName": "infosys",
+    "contactName": "Rajyalaxmi",
+    "email": "connectgprem@gmail.com",
+    "phone": "8789789809809",
+    "industry": "Healthcare",
+    "message": "",
+    "category": "Partnership",
+    "status": "received",
+    "createdAt": "2026-06-02T07:44:17.939Z"
+  },
+  {
+    "id": 1780386776113,
+    "companyName": "infosys",
+    "contactName": "Rajyalaxmi",
+    "email": "connectgprem@gmail.com",
+    "phone": "8789789809809",
+    "industry": "Finance",
+    "message": "",
+    "category": "Partnership",
+    "status": "processing",
+    "createdAt": "2026-06-02T07:52:56.113Z"
+  }
+]
