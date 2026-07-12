@@ -6,6 +6,7 @@ const app = express();
 const PORT = process.env.PORT ?? 4000;
 const dataPath = new URL("./enrollments.json", import.meta.url);
 const inquiriesPath = new URL("./inquiries.json", import.meta.url);
+const notificationsPath = new URL("./notifications.json", import.meta.url);
 
 app.use(cors());
 app.use(express.json());
@@ -36,6 +37,33 @@ const saveInquiries = (entries) => {
   fs.writeFileSync(inquiriesPath, JSON.stringify(entries, null, 2), "utf-8");
 };
 
+const readNotifications = () => {
+  try {
+    const raw = fs.readFileSync(notificationsPath, "utf-8");
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+};
+
+const saveNotifications = (entries) => {
+  fs.writeFileSync(notificationsPath, JSON.stringify(entries, null, 2), "utf-8");
+};
+
+const addNotification = (type, title, message) => {
+  const notifications = readNotifications();
+  notifications.unshift({
+    id: Date.now(),
+    type,
+    title,
+    message,
+    createdAt: new Date().toISOString(),
+    read: false,
+  });
+  saveNotifications(notifications.slice(0, 50));
+  return notifications[0];
+};
+
 app.post("/api/enroll", (req, res) => {
   const { name, email, phone, message, program } = req.body;
 
@@ -58,6 +86,7 @@ app.post("/api/enroll", (req, res) => {
 
   enrollments.push(enrollment);
   saveEnrollments(enrollments);
+  addNotification("enrollment", "New enrollment received", `${name} requested enrollment for ${program}.`);
 
   return res.status(201).json({ success: true, enrollment });
 });
@@ -86,6 +115,7 @@ app.post("/api/inquiry", (req, res) => {
 
   inquiries.push(inquiry);
   saveInquiries(inquiries);
+  addNotification("inquiry", "New inquiry received", `${contactName} submitted a new inquiry for ${category || "partnership"}.`);
 
   return res.status(201).json({ success: true, inquiry });
 });
@@ -144,6 +174,16 @@ app.put("/api/inquiry/:id/status", (req, res) => {
   saveInquiries(inquiries);
 
   return res.json({ success: true, inquiry });
+});
+
+app.get("/api/notifications", (req, res) => {
+  const adminKey = String(req.query.adminKey || "").trim();
+
+  if (adminKey !== "admin123") {
+    return res.status(403).json({ error: "Invalid admin key." });
+  }
+
+  return res.json({ notifications: readNotifications().slice(0, 10) });
 });
 
 app.get("/api/track", (req, res) => {

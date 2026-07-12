@@ -50,6 +50,13 @@ const Partnership = () => {
         throw new Error(result.error || "Failed to submit inquiry.");
       }
 
+      window.dispatchEvent(new CustomEvent("admin-notification", {
+        detail: {
+          title: "New inquiry received",
+          message: `${formData.contactName.trim()} submitted a new inquiry.`,
+        },
+      }));
+
       alert("Thank you for your interest! Your inquiry has been received. Use /track with your email to check status.");
       setFormData({
         companyName: "",

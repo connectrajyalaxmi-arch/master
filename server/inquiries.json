@@ -34,5 +34,53 @@
     "category": "Partnership",
     "status": "processing",
     "createdAt": "2026-06-02T07:52:56.113Z"
+  },
+  {
+    "id": 1780493791015,
+    "companyName": "infosys",
+    "contactName": "Premkumar Gangadhari",
+    "email": "suraj@gmail.com",
+    "phone": "8789789809809",
+    "industry": "Retail",
+    "message": "",
+    "category": "Partnership",
+    "status": "received",
+    "createdAt": "2026-06-03T13:36:31.015Z"
+  },
+  {
+    "id": 1780674277540,
+    "companyName": "infosys",
+    "contactName": "Rajyalaxmi",
+    "email": "rajyalaxmi.samudrala@gmail.com",
+    "phone": "9100224622",
+    "industry": "IT",
+    "message": "",
+    "category": "Partnership",
+    "status": "received",
+    "createdAt": "2026-06-05T15:44:37.540Z"
+  },
+  {
+    "id": 1783841633002,
+    "companyName": "",
+    "contactName": "Anusha yadav",
+    "email": "thotlaanushayadav@gmail.com",
+    "phone": "",
+    "industry": "working-professional",
+    "message": "",
+    "category": "cybersecurity",
+    "status": "received",
+    "createdAt": "2026-07-12T07:33:53.002Z"
+  },
+  {
+    "id": 1783842407412,
+    "companyName": "",
+    "contactName": "Premaleka",
+    "email": "premleka@gmail.com",
+    "phone": "",
+    "industry": "undergrad",
+    "message": "",
+    "category": "software-development",
+    "status": "received",
+    "createdAt": "2026-07-12T07:46:47.412Z"
   }
 ]

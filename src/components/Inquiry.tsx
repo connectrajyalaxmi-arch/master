@@ -20,6 +20,7 @@ const Inquiry = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -34,35 +35,54 @@ const Inquiry = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/inquiries", {
+      const response = await fetch("/api/inquiry", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...formData,
+          companyName: "",
+          contactName: formData.name,
+          email: formData.email,
+          phone: "",
+          industry: formData.background || "",
+          message: formData.message,
+          category: formData.interests || "Partnership",
           submittedAt: new Date().toISOString(),
         }),
       });
 
-      if (response.ok) {
-        setSubmitted(true);
-        setFormData({
-          name: "",
-          email: "",
-          interests: "",
-          background: "",
-          message: "",
-        });
+      const payload = await response.json().catch(() => ({}));
 
-        setTimeout(() => {
-          setSubmitted(false);
-        }, 5000);
+      if (!response.ok) {
+        throw new Error(payload.error || "Unable to submit inquiry right now.");
       }
+
+      window.dispatchEvent(new CustomEvent("admin-notification", {
+        detail: {
+          title: "New inquiry received",
+          message: `${formData.name} submitted a new inquiry.`,
+        },
+      }));
+
+      setSubmitted(true);
+      setFormData({
+        name: "",
+        email: "",
+        interests: "",
+        background: "",
+        message: "",
+      });
+
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 5000);
     } catch (error) {
       console.error("Error submitting inquiry:", error);
+      setErrorMessage(error instanceof Error ? error.message : "Unable to submit inquiry right now.");
     } finally {
       setIsLoading(false);
     }
@@ -196,6 +216,10 @@ const Inquiry = () => {
               >
                 {isLoading ? "Submitting..." : "Get Personalized Recommendations"}
               </button>
+
+              {errorMessage && (
+                <p className="text-center text-sm text-red-600 mt-3">{errorMessage}</p>
+              )}
 
               <p className="text-center text-sm text-gray-500 mt-4">
                 We respect your privacy. Your information will only be used to provide personalized guidance.

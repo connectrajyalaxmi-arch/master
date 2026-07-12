@@ -1,10 +1,48 @@
+import { useEffect, useState } from "react";
 import logo from "../assets/nsfi-logo.png";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [isAdminAuthorized, setIsAdminAuthorized] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("nsfi_admin_authorized") === "true";
+  });
+
+  const [notifications, setNotifications] = useState<{ id: number; title: string; message: string }[]>([]);
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    const syncAdminStatus = () => {
+      setIsAdminAuthorized(window.localStorage.getItem("nsfi_admin_authorized") === "true");
+    };
+
+    syncAdminStatus();
+    window.addEventListener("admin-auth-changed", syncAdminStatus);
+
+    const handleNotification = (event: Event) => {
+      const customEvent = event as CustomEvent<{ title: string; message: string }>;
+      const payload = customEvent.detail;
+      if (!payload) return;
+
+      const id = Date.now();
+      setNotifications((prev) => [
+        { id, title: payload.title, message: payload.message },
+        ...prev,
+      ].slice(0, 5));
+      setShowToast(true);
+    };
+
+    window.addEventListener("admin-notification", handleNotification);
+
+    return () => {
+      window.removeEventListener("admin-auth-changed", syncAdminStatus);
+      window.removeEventListener("admin-notification", handleNotification);
+    };
+  }, []);
 
   return (
+    <>
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
@@ -31,6 +69,22 @@ const Navbar = () => {
           <li className="hover:text-[#241A8B] transition cursor-pointer list-none">About</li>
           <li onClick={() => navigate("/programs")} className="hover:text-[#241A8B] transition cursor-pointer list-none">Programs</li>
           <li onClick={() => navigate("/track")} className="hover:text-[#241A8B] transition cursor-pointer list-none">Track</li>
+          <li
+  onClick={() => navigate("/learn")}
+  className="hover:text-[#241A8B] transition cursor-pointer list-none"
+>
+  Learn
+</li>
+          {isAdminAuthorized && (
+            <div className="flex items-center gap-2">
+              <li onClick={() => navigate("/admin")} className="hover:text-[#241A8B] transition cursor-pointer list-none font-semibold">Admin</li>
+              {notifications.length > 0 && (
+                <span className="rounded-full bg-orange-500 px-2.5 py-1 text-xs font-semibold text-white">
+                  {notifications.length}
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="relative group">
             <button className="flex items-center gap-1 hover:text-[#241A8B] transition cursor-pointer">
@@ -54,6 +108,27 @@ const Navbar = () => {
 
       </div>
     </nav>
+
+    {showToast && notifications[0] && (
+      <div className="fixed top-5 right-5 z-50 max-w-sm rounded-xl border border-orange-200 bg-white p-4 shadow-2xl">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-[#241A8B]">{notifications[0].title}</p>
+            <p className="mt-1 text-sm text-gray-600">{notifications[0].message}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setShowToast(false);
+            }}
+            className="text-xs font-semibold text-gray-500 hover:text-gray-700"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    )}
+    </>
   );
 };
 

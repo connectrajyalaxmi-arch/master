@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent, FormEvent, MouseEvent } from "react";
 import Navbar from "../components/Navbar";
 import { FiArrowRight } from "react-icons/fi";
 
@@ -95,8 +95,9 @@ const Programs = () => {
     setEnrollForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleEnrollSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleEnrollSubmit = async (e?: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     console.log("Enroll submit handler fired", { enrollForm, selectedProgram });
 
     if (!enrollForm.name.trim() || !enrollForm.email.trim()) {
@@ -130,6 +131,13 @@ const Programs = () => {
       if (!response.ok) {
         throw new Error(result.error || "Failed to submit enrollment.");
       }
+
+      window.dispatchEvent(new CustomEvent("admin-notification", {
+        detail: {
+          title: "New enrollment received",
+          message: `${enrollForm.name.trim()} requested enrollment for ${selectedProgram.title}.`,
+        },
+      }));
 
       setConfirmationMessage(
         `Thank you, ${enrollForm.name}! Your enrollment request for ${selectedProgram.title} has been received. You can track the status at /track using your email.`
@@ -210,7 +218,7 @@ const Programs = () => {
       {selectedProgram && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-10">
           <div className="w-full max-w-2xl rounded-none bg-white p-8 shadow-2xl">
-            <div className="flex items-start justify-between gap-4 mb-6">
+            <div className="flex items-start justify-between gap-4 mb-6 ">
               <div>
                 <h2 className="text-3xl font-bold text-[#241A8B]">Enroll in {selectedProgram.title}</h2>
                 <p className="text-sm text-gray-500 mt-2">Complete the form and our admissions team will follow up shortly.</p>
@@ -285,7 +293,11 @@ const Programs = () => {
                 <button type="button" onClick={closeEnrollModal} className="rounded-xl border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
                   Cancel
                 </button>
-                <button type="submit" className="rounded-xl bg-[#241A8B] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1a1466]">
+                <button
+                  type="button"
+                  onClick={(e) => handleEnrollSubmit(e)}
+                  className="rounded-xl bg-[#241A8B] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1a1466]"
+                >
                   Submit Enrollment
                 </button>
               </div>

@@ -5,22 +5,28 @@ const About = () => {
 
   const stories = [
     {
-      title: "Find Your Voice",
+      title: "For School Students",
+      highlight: "Build confidence early",
       description:
-        "Your unique perspective is your strength. We help you develop skills that amplify who you already are, not who someone else wants you to be.",
+        "We help young learners discover their strengths, sharpen communication skills, and prepare for future academic and career opportunities with confidence.",
       icon: "✨",
+      accent: "from-orange-50 to-amber-50",
     },
     {
-      title: "Navigate Wisely",
+      title: "For College Students",
+      highlight: "Shape your career path",
       description:
-        "In a competitive landscape, choice matters. We guide you through programs aligned with your aspirations, not just market trends.",
-      icon: "🧭",
+        "Our programs guide college students through practical skills, industry readiness, and real-world exposure so they can stand out in a crowded job market.",
+      icon: "🎓",
+      accent: "from-blue-50 to-indigo-50",
     },
     {
-      title: "Transform Meaningfully",
+      title: "For Companies & Organizations",
+      highlight: "Grow capable talent",
       description:
-        "Real growth comes from understanding yourself. We build skills that create lasting impact and authentic confidence.",
-      icon: "🚀",
+        "We partner with organizations to build future-ready teams through tailored learning experiences, workforce alignment, and long-term growth support.",
+      icon: "🏢",
+      accent: "from-emerald-50 to-lime-50",
     },
   ];
 
@@ -28,13 +34,13 @@ const About = () => {
     <>
       <section className="py-20 bg-gradient-to-b from-white to-gray-50 w-full">
         <div className="w-full px-6">
-          <div className="mb-12">
+          <div className="mb-12 max-w-4xl">
             <h2 className="text-4xl md:text-5xl font-bold text-[#241A8B] mb-4 leading-tight">
               Why Choose NSFI?
             </h2>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-full">
-              We're not just another training institute. We believe that the best career path is the one that honors your individuality.
-              That's why our approach starts with understanding you—your dreams, your challenges, your unique perspective.
+            <p className="text-lg text-gray-600 leading-relaxed">
+              We're not just another training institute. We believe the right learning path should fit the learner, the stage of growth, and the future they want to build.
+              That's why our programs are designed to support school students, college students, and organizations in meaningful ways.
             </p>
           </div>
 
@@ -42,9 +48,14 @@ const About = () => {
             {stories.map((story, index) => (
               <div
                 key={index}
-                className="bg-white p-8 shadow-sm hover:shadow-md transition-shadow"
+                className={`rounded-[1.5rem] border border-slate-200 bg-gradient-to-br ${story.accent} p-8 shadow-[0_20px_45px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_25px_60px_rgba(15,23,42,0.12)]`}
               >
-                <div className="text-4xl mb-4">{story.icon}</div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 text-2xl mb-5 shadow-sm">
+                  {story.icon}
+                </div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#241A8B]/70 mb-3">
+                  {story.highlight}
+                </p>
                 <h3 className="text-xl font-bold text-[#241A8B] mb-3">{story.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{story.description}</p>
               </div>
