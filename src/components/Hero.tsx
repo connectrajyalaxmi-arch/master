@@ -1,15 +1,12 @@
 import heroImage from "../assets/hero.jpg.jpeg";
-import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
-  const navigate = useNavigate();
-
   return (
     <section className="relative overflow-hidden">
 
       <img
         src={heroImage}
-        alt="Students"
+        alt="Students" 
         className="absolute inset-0 w-full h-full object-cover"
       />
 
@@ -40,7 +37,7 @@ const Hero = () => {
             Discover a program that aligns with your aspirations and transforms how you see yourself.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
+          {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
             <button
               onClick={() => navigate("/programs")}
               className="w-full sm:w-auto px-14 py-6 text-lg font-semibold rounded-none bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg hover:shadow-2xl transform hover:-translate-y-0.5 transition"
@@ -54,7 +51,7 @@ const Hero = () => {
             >
               Tell Us About You
             </button>
-          </div>
+          </div> */}
         </div>
 
       </div>

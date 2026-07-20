@@ -7,11 +7,20 @@ import TrackStatus from "./pages/TrackStatus";
 import InquiryPage from "./pages/Inquiry";
 import AdminTracking from "./pages/AdminTracking";
 import Learn from "./pages/Learn";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Signup from "./pages/Signup";
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactElement }) => {
   const isAdminAuthorized = typeof window !== "undefined" && window.localStorage.getItem("nsfi_admin_authorized") === "true";
 
   return isAdminAuthorized ? children : <Navigate to="/track" replace />;
+};
+
+const ProtectedUserRoute = ({ children }: { children: React.ReactElement }) => {
+  const isUserLoggedIn = typeof window !== "undefined" && Boolean(window.localStorage.getItem("nsfi_user_email"));
+
+  return isUserLoggedIn ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
@@ -26,6 +35,9 @@ function App() {
           <Route path="/track" element={<TrackStatus />} />
           <Route path="/inquiry" element={<InquiryPage />} />
           <Route path="/admin" element={<ProtectedAdminRoute><AdminTracking /></ProtectedAdminRoute>} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<ProtectedUserRoute><Profile /></ProtectedUserRoute>} />
           <Route path="/learn" element={<Learn />} />
         </Routes>
       </Router>

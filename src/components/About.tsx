@@ -1,8 +1,4 @@
-import { useNavigate } from "react-router-dom";
-
 const About = () => {
-  const navigate = useNavigate();
-
   const stories = [
     {
       title: "For School Students",
@@ -34,7 +30,9 @@ const About = () => {
     <>
       <section className="py-20 bg-gradient-to-b from-white to-gray-50 w-full">
         <div className="w-full px-6">
-          <div className="mb-12 max-w-4xl">
+          <br/>
+          <br/>
+          {/* <div className="mb-12 max-w-4xl">
             <h2 className="text-4xl md:text-5xl font-bold text-[#241A8B] mb-4 leading-tight">
               Why Choose NSFI?
             </h2>
@@ -42,7 +40,7 @@ const About = () => {
               We're not just another training institute. We believe the right learning path should fit the learner, the stage of growth, and the future they want to build.
               That's why our programs are designed to support school students, college students, and organizations in meaningful ways.
             </p>
-          </div>
+          </div> */}
 
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8">
             {stories.map((story, index) => (
@@ -64,7 +62,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-white w-full">
+      {/* <section className="py-20 bg-white w-full">
         <div className="w-full px-6">
           <div className="mb-8">
             <h2 className="text-4xl md:text-5xl font-bold text-[#241A8B] leading-tight">
@@ -108,7 +106,8 @@ const About = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
+      
     </>
   );
 };
