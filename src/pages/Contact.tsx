@@ -3,6 +3,7 @@ import {
   FiMail,
   FiPhone,
   FiMapPin,
+  FiCheckCircle,
 } from "react-icons/fi";
 import { useState, type FormEvent } from "react";
 import Navbar from "../components/Navbar";
@@ -11,12 +12,15 @@ import Footer from "../components/Footer";
 
 const Contact = () => {
 
+const [submitted, setSubmitted] = useState(false);
+
     const [formData, setFormData] = useState({
   companyName: "",
   contactName: "",
   email: "",
   phone: "",
   industry: "",
+  subject: "",
   message: "",
 });
 const handleSubmit = async (
@@ -44,7 +48,9 @@ const handleSubmit = async (
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         industry: formData.industry,
-        message: formData.message.trim(),
+        message: formData.subject.trim()
+          ? `Subject: ${formData.subject.trim()}\n\n${formData.message.trim()}`
+          : formData.message.trim(),
         category: "Contact Us",
       }),
     });
@@ -66,9 +72,7 @@ const handleSubmit = async (
       })
     );
 
-    alert(
-      "Thank you! Your inquiry has been submitted successfully."
-    );
+    setSubmitted(true);
 
     setFormData({
       companyName: "",
@@ -76,6 +80,7 @@ const handleSubmit = async (
       email: "",
       phone: "",
       industry: "",
+      subject: "",
       message: "",
     });
   } catch (error) {
@@ -259,6 +264,22 @@ const handleSubmit = async (
         back to you within 24 hours.
       </p>
 
+{submitted ? (
+  <div className="mt-10 rounded-3xl border border-emerald-200 bg-emerald-50 p-7 text-center shadow-sm">
+    <FiCheckCircle className="mx-auto h-12 w-12 text-emerald-500" />
+    <h3 className="mt-4 text-2xl font-black text-emerald-800">Thank you!</h3>
+    <p className="mt-2 leading-7 text-emerald-700">
+      Your inquiry has been received. Our team will get back to you within 24 hours.
+    </p>
+    <button
+      type="button"
+      onClick={() => setSubmitted(false)}
+      className="mt-6 rounded-xl border border-emerald-300 bg-white px-5 py-3 font-bold text-emerald-700 transition hover:bg-emerald-100"
+    >
+      Send another inquiry
+    </button>
+  </div>
+) : (
 <form
   onSubmit={handleSubmit}
   className="mt-10 space-y-6"
@@ -268,6 +289,8 @@ const handleSubmit = async (
         <input
           type="text"
           placeholder="Full Name"
+          value={formData.contactName}
+          onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
           className="w-full rounded-2xl border border-gray-200 px-5 py-4 outline-none transition focus:border-[#241A8B]"
         />
 
@@ -276,6 +299,8 @@ const handleSubmit = async (
         <input
           type="email"
           placeholder="Email Address"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           className="w-full rounded-2xl border border-gray-200 px-5 py-4 outline-none transition focus:border-[#241A8B]"
         />
 
@@ -284,12 +309,16 @@ const handleSubmit = async (
         <input
           type="tel"
           placeholder="Phone Number"
+          value={formData.phone}
+          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
           className="w-full rounded-2xl border border-gray-200 px-5 py-4 outline-none transition focus:border-[#241A8B]"
         />
 
         {/* Category */}
 
         <select
+          value={formData.industry}
+          onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
           className="w-full rounded-2xl border border-gray-200 px-5 py-4 outline-none transition focus:border-[#241A8B]"
         >
           <option>Select Category</option>
@@ -308,6 +337,8 @@ const handleSubmit = async (
         <input
           type="text"
           placeholder="Subject"
+          value={formData.subject}
+          onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           className="w-full rounded-2xl border border-gray-200 px-5 py-4 outline-none transition focus:border-[#241A8B]"
         />
 
@@ -316,6 +347,8 @@ const handleSubmit = async (
         <textarea
           rows={6}
           placeholder="Tell us how we can help..."
+          value={formData.message}
+          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
           className="w-full rounded-2xl border border-gray-200 px-5 py-4 outline-none transition focus:border-[#241A8B]"
         />
 
@@ -329,6 +362,7 @@ const handleSubmit = async (
         </button>
 
       </form>
+)}
 
     </motion.div>
 

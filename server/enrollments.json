@@ -6,7 +6,7 @@
     "phone": "8789789809809",
     "message": "",
     "program": "Software Development Bootcamp",
-    "status": "received",
+    "status": "completed",
     "createdAt": "2026-06-01T05:25:34.259Z"
   },
   {
@@ -16,7 +16,7 @@
     "phone": "8789789809809",
     "message": "",
     "program": "Data Science & Analytics",
-    "status": "under-review",
+    "status": "completed",
     "createdAt": "2026-06-01T05:26:18.676Z"
   },
   {
@@ -36,7 +36,7 @@
     "phone": "8789789809809",
     "message": "",
     "program": "Software Development Bootcamp",
-    "status": "processing",
+    "status": "completed",
     "createdAt": "2026-06-01T05:31:35.747Z"
   },
   {
@@ -246,7 +246,7 @@
     "phone": "",
     "message": "",
     "program": "AI Fundamentals",
-    "status": "received",
+    "status": "completed",
     "createdAt": "2026-07-24T15:38:31.563Z"
   },
   {
@@ -298,5 +298,25 @@
     "program": "AI Fundamentals",
     "status": "received",
     "createdAt": "2026-08-01T03:04:52.382Z"
+  },
+  {
+    "id": 1785603335773,
+    "name": "Roy joe",
+    "email": "john@gmail.com",
+    "phone": "",
+    "message": "",
+    "program": "AI Fundamentals",
+    "status": "received",
+    "createdAt": "2026-08-01T16:55:35.773Z"
+  },
+  {
+    "id": 1785603668167,
+    "name": "Mark",
+    "email": "mark@gmail.com",
+    "phone": "",
+    "message": "",
+    "program": "AI Fundamentals",
+    "status": "received",
+    "createdAt": "2026-08-01T17:01:08.167Z"
   }
 ]

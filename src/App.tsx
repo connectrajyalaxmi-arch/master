@@ -16,18 +16,7 @@ import Colleges from "./pages/Colleges";
 import Organizations from "./pages/Organizations";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
-
-const ProtectedAdminRoute = ({
-  children,
-}: {
-  children: React.ReactElement;
-}) => {
-  const isAdminAuthorized =
-    typeof window !== "undefined" &&
-    window.localStorage.getItem("nsfi_admin_authorized") === "true";
-
-  return isAdminAuthorized ? children : <Navigate to="/track" replace />;
-};
+import Faq from "./pages/Faq";
 
 const ProtectedUserRoute = ({
   children,
@@ -54,6 +43,7 @@ function App() {
 <Route path="/colleges" element={<Colleges />} />
 <Route path="/organizations" element={<Organizations />} />
 <Route path="/about" element={<About />} />
+        <Route path="/faqs" element={<Faq />} />
 
         <Route path="/programs" element={<Programs />} />
 
@@ -68,14 +58,7 @@ function App() {
 
         {/* <Route path="/inquiry" element={<InquiryPage />} /> */}
 
-        <Route
-          path="/admin"
-          element={
-            <ProtectedAdminRoute>
-              <AdminTracking />
-            </ProtectedAdminRoute>
-          }
-        />
+        <Route path="/admin" element={<AdminTracking />} />
 
         <Route path="/signup" element={<Signup />} />
 

@@ -106,5 +106,29 @@
     "category": "Partnership",
     "status": "received",
     "createdAt": "2026-07-25T05:05:22.037Z"
+  },
+  {
+    "id": 1785562897483,
+    "companyName": "",
+    "contactName": "Max",
+    "email": "Max@gmail.com",
+    "phone": "9550232757",
+    "industry": "College",
+    "message": "Subject: java\n\n",
+    "category": "Contact Us",
+    "status": "received",
+    "createdAt": "2026-08-01T05:41:37.483Z"
+  },
+  {
+    "id": 1785563212925,
+    "companyName": "",
+    "contactName": "rose",
+    "email": "rose@gmail.com",
+    "phone": "9550234767",
+    "industry": "Organization",
+    "message": "Subject: JAVA\n\n",
+    "category": "Contact Us",
+    "status": "received",
+    "createdAt": "2026-08-01T05:46:52.925Z"
   }
 ]

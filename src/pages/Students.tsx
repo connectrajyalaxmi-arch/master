@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import studentsImg from "../assets/students.jpeg";
 
 
 import {
@@ -75,6 +76,13 @@ const Students = () => {
       description:
         "Build your portfolio, prepare for interviews, and take confident steps toward your first opportunity.",
     },
+    {
+      icon: <FiCheckCircle size={32} />,
+      title: "Career Readiness",
+      tone: "from-teal-600 to-emerald-400",
+      description:
+        "Strengthen your resume, interview confidence, professional presence, and job-search strategy.",
+    },
   ];
 
   return (
@@ -89,23 +97,22 @@ const Students = () => {
           <div className="absolute inset-0 opacity-[0.045] bg-[linear-gradient(#241A8B_1px,transparent_1px),linear-gradient(to_right,#241A8B_1px,transparent_1px)] bg-[size:64px_64px]" />
         </div>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#120f4d] via-[#241A8B] to-[#4431d8] text-white">
+      <section className="relative overflow-hidden bg-[#0B0D5C] text-white">
 
         {/* Background */}
 
-        <div className="absolute inset-0 overflow-hidden">
-
-          <div className="absolute -left-40 top-0 h-[550px] w-[550px] rounded-full bg-orange-500/20 blur-[120px] animate-pulse" />
-
-          <div className="absolute right-0 bottom-0 h-[520px] w-[520px] rounded-full bg-cyan-400/15 blur-[120px] animate-pulse" />
-
-          <div className="absolute left-1/2 top-10 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-white/10 blur-[100px]" />
-
+        <div className="absolute inset-0">
+          <img
+            src={studentsImg}
+            alt="Students building their future together"
+            className="h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B0D5C]/95 via-[#241A8B]/80 to-[#241A8B]/30" />
         </div>
 
         <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(#fff_1px,transparent_1px),linear-gradient(to_right,#fff_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-2">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 py-14 lg:grid-cols-2 lg:py-16">
 
           {/* LEFT */}
 
@@ -117,7 +124,7 @@ const Students = () => {
 
             </span>
 
-            <h1 className="mt-8 text-5xl font-black leading-tight md:text-7xl">
+            <h1 className="mt-6 text-5xl font-black leading-tight md:text-6xl">
 
               From Dreams
 
@@ -131,7 +138,7 @@ const Students = () => {
 
             </h1>
 
-            <h2 className="mt-8 text-2xl font-semibold leading-relaxed text-indigo-100 md:text-3xl">
+            <h2 className="mt-6 text-2xl font-semibold leading-relaxed text-indigo-100 md:text-3xl">
 
               Your Future Should Never Be Limited
 
@@ -141,7 +148,7 @@ const Students = () => {
 
             </h2>
 
-            <p className="mt-8 max-w-2xl text-lg leading-9 text-indigo-100">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-indigo-100">
 
               Most students don't struggle because they lack talent.
               They struggle because nobody taught them the skills
@@ -159,7 +166,7 @@ const Students = () => {
 
             </p>
 
-            <p className="mt-8 max-w-2xl text-lg leading-9 text-indigo-100">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-indigo-100">
 
               At <strong>National Skill Forge Institute (NSFI)</strong>,
               we transform classroom learning into career readiness through
@@ -168,7 +175,7 @@ const Students = () => {
 
             </p>
 
-            <div className="mt-12 flex flex-wrap gap-5">
+            <div className="mt-8 flex flex-wrap gap-5">
 
               <button
                 onClick={() => navigate("/programs")}
@@ -189,25 +196,7 @@ const Students = () => {
 
           </div>
 
-          <div className="relative">
-
-            <div className="absolute -inset-6 rounded-[50px] bg-gradient-to-r from-orange-500/20 via-indigo-500/20 to-cyan-400/20 blur-3xl"></div>
-
-            <div className="relative rounded-[36px] border border-white/20 bg-white/10 p-8 backdrop-blur-xl shadow-[0_25px_80px_rgba(0,0,0,.35)]">
-              <span className="inline-flex rounded-full border border-orange-300/40 bg-orange-400/15 px-4 py-2 text-xs font-black tracking-[0.18em] text-orange-200">YOUR FUTURE STARTS HERE</span>
-              <h2 className="mt-8 text-4xl font-black leading-tight">Learn. Build. <span className="text-orange-300">Launch.</span></h2>
-              <div className="mt-8 grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                {[{ value: "5000+", label: "Students Empowered" }, { value: "100+", label: "Industry Programs" }, { value: "1 Goal", label: "Your Career Growth" }].map((item) => (
-                  <div key={item.label} className="rounded-3xl border border-white/15 bg-white/10 p-5 shadow-lg">
-                    <p className="text-3xl font-black text-orange-300">{item.value}</p>
-                    <p className="mt-2 text-sm leading-6 text-indigo-100">{item.label}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-8 text-lg leading-8 text-indigo-100">Practical learning, expert support, and meaningful opportunities—all designed around your next step.</p>
-            </div>
-
-          </div>
+          <div aria-hidden="true" />
 
         </div>
 
@@ -398,38 +387,33 @@ const Students = () => {
 <section className="relative overflow-hidden border-y border-indigo-100/80 bg-indigo-50/55 py-24 backdrop-blur-sm">
 
   <div className="mx-auto max-w-7xl px-6">
-
+    <div className="rounded-[42px] border border-white/80 bg-white/75 p-6 shadow-[0_25px_80px_rgba(36,26,139,.12)] backdrop-blur-sm md:p-10 lg:p-12">
     <div className="text-center">
 
-      <span className="inline-flex rounded-full border border-orange-200 bg-orange-50 px-5 py-2 text-sm font-bold tracking-widest text-orange-600 shadow-sm">
-        LEARNING MODEL
+      <span className="inline-flex rounded-full border border-orange-200 bg-orange-50 px-7 py-3 text-base font-black tracking-[0.2em] text-orange-600 shadow-sm md:text-lg">
+        CHOOSE YOUR JOURNEY
       </span>
 
       <h2 className="mt-6 text-4xl font-black text-[#241A8B] md:text-5xl">
-
-        Our Learning Approach
+        We Have a Path for Everyone
 
       </h2>
 
       <div className="mx-auto mt-6 h-1 w-20 rounded-full bg-gradient-to-r from-orange-400 via-orange-500 to-indigo-600" />
 
-      <p className="mx-auto mt-6 max-w-3xl text-center text-xl font-medium leading-8 text-slate-700 md:text-2xl">
-
-        Learn with purpose through real-world projects, expert-led
-        guidance, and the practical confidence to succeed beyond the classroom.
+      <p className="mx-auto mt-6 max-w-5xl text-center text-lg font-medium leading-8 text-slate-700 md:text-xl">
+        Find a practical path that builds in-demand skills, confidence, and career momentum.
 
       </p>
 
     </div>
-    <br/>
-
-    <div className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
       {programs.map((program) => (
 
         <div
           key={program.title}
-          className="group relative overflow-hidden rounded-[30px] border border-white/80 bg-white/85 p-8 shadow-[0_12px_35px_rgba(36,26,139,.09)] backdrop-blur-sm transition-all duration-500 hover:-translate-y-3 hover:border-indigo-200 hover:shadow-[0_25px_60px_rgba(36,26,139,.2)]"
+          className="group relative overflow-hidden rounded-[30px] border border-indigo-100 bg-white p-7 shadow-[0_12px_35px_rgba(36,26,139,.09)] transition-all duration-500 hover:-translate-y-3 hover:border-indigo-200 hover:shadow-[0_25px_60px_rgba(36,26,139,.2)]"
         >
 
           <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-indigo-100/70 blur-2xl transition duration-500 group-hover:scale-150" />
@@ -472,6 +456,7 @@ const Students = () => {
 
     </div>
 
+    </div>
   </div>
 
 </section>

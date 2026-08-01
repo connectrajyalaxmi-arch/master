@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import {
   FiUser,
   FiMail,
+  FiPhone,
   FiLock,
   FiCalendar,
   FiEye,
@@ -26,6 +27,7 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -36,8 +38,14 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     event.preventDefault();
     setError("");
 
-    if (!name.trim() || !dob.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
+    if (!name.trim() || !dob.trim() || !email.trim() || !phone.trim() || !password.trim() || !confirmPassword.trim()) {
       setError("All fields are required for signup.");
+      return;
+    }
+
+    const normalizedPhone = phone.replace(/\D/g, "");
+    if (normalizedPhone.length < 10 || normalizedPhone.length > 15) {
+      setError("Please enter a valid phone number.");
       return;
     }
 
@@ -48,7 +56,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     if (typeof window !== "undefined") {
       const accountsJson = window.localStorage.getItem("nsfi_user_accounts") || "{}";
-      const accounts = JSON.parse(accountsJson) as Record<string, { name: string; dob: string; email: string; password: string }>;
+      const accounts = JSON.parse(accountsJson) as Record<string, { name: string; dob: string; email: string; phone?: string; password: string }>;
       const normalizedEmail = email.trim().toLowerCase();
 
       if (accounts[normalizedEmail]) {
@@ -60,6 +68,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
         name: name.trim(),
         dob: dob.trim(),
         email: normalizedEmail,
+        phone: normalizedPhone,
         password: password,
       };
 
@@ -68,6 +77,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
       window.localStorage.setItem("nsfi_user_email", accountData.email);
       window.localStorage.setItem("nsfi_user_name", accountData.name);
       window.localStorage.setItem("nsfi_user_dob", accountData.dob);
+      window.localStorage.setItem("nsfi_user_phone", accountData.phone);
       window.dispatchEvent(new Event("user-auth-changed"));
     }
 
@@ -389,6 +399,31 @@ className="w-full bg-transparent px-4 py-4 outline-none"
       value={email}
       onChange={(e) => setEmail(e.target.value)}
       placeholder="john@example.com"
+      className="w-full bg-transparent px-4 py-4 outline-none"
+    />
+
+  </div>
+
+</div>
+
+{/* Phone */}
+
+<div>
+
+  <label className="text-sm font-semibold">
+    Phone Number
+  </label>
+
+  <div className="mt-2 flex items-center rounded-2xl border bg-gray-50 px-4">
+
+    <FiPhone className="text-gray-400" />
+
+    <input
+      type="tel"
+      inputMode="tel"
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)}
+      placeholder="Enter your phone number"
       className="w-full bg-transparent px-4 py-4 outline-none"
     />
 

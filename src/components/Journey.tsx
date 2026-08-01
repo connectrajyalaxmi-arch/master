@@ -41,6 +41,7 @@ const Journey = () => {
     />
 
     <div className="relative mx-auto max-w-7xl px-6">
+      <div className="rounded-[42px] border border-white/80 bg-white/75 p-6 shadow-[0_25px_80px_rgba(36,26,139,.12)] backdrop-blur-sm md:p-10 lg:p-12">
 
       <motion.div
         initial={{ opacity: 0, y: 60 }}
@@ -50,18 +51,16 @@ const Journey = () => {
         className="text-center"
       >
 
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-orange-500">
+        <p className="text-base font-black uppercase tracking-[0.2em] text-orange-500 md:text-lg">
           CHOOSE YOUR JOURNEY
         </p>
 
-        <h2 className="mt-4 text-5xl font-black text-[#241A8B]">
+        <h2 className="mt-5 text-4xl font-black text-[#241A8B] md:text-5xl">
           We Have a Path for Everyone
         </h2>
       </motion.div>
 
-<br/>
-<br/>
-<div className="mt-20 mx-auto grid max-w-7xl gap-8 md:grid-cols-2 lg:grid-cols-3">
+<div className="mt-12 mx-auto grid max-w-7xl gap-6 md:grid-cols-2 lg:grid-cols-3">
         {[
           {
             title: "Students",
@@ -146,6 +145,7 @@ const Journey = () => {
 
       </div>
 
+      </div>
     </div>
 
   </section>

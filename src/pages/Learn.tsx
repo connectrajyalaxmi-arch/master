@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import { motion } from "framer-motion";
 import Tilt from "react-parallax-tilt";
 
-import heroImg from "../assets/hero.jpg.jpeg";
+import learnImg from "../assets/Learn.jpeg";
 
 import {
   FiArrowRight,
@@ -191,13 +191,32 @@ const Learn = () => {
               HERO SECTION
         ========================================================= */}
 
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#120f4d] via-[#241A8B] to-[#4431d8] text-white">
+        <section className="relative overflow-hidden bg-[#0B0D5C] text-white">
+          <div className="absolute inset-0">
+            <img src={learnImg} alt="Learning resources and study materials" className="h-full w-full object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0B0D5C]/95 via-[#241A8B]/80 to-[#241A8B]/30" />
+            <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(#fff_1px,transparent_1px),linear-gradient(to_right,#fff_1px,transparent_1px)] bg-[size:60px_60px]" />
+          </div>
 
-          {/* Animated Background */}
-
-          <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-2">
-
-            Free Resources
+          <div className="relative mx-auto max-w-7xl px-6 py-14 lg:py-16">
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="max-w-3xl"
+            >
+              <span className="inline-flex rounded-full border border-orange-300/40 bg-[#0B0D5C]/60 px-5 py-2 text-sm font-black tracking-[0.18em] text-orange-200 backdrop-blur">LEARN WITH NSFI</span>
+              <h1 className="mt-6 text-5xl font-black leading-tight md:text-6xl">Explore. <span className="text-orange-400">Learn.</span><br />Grow Your Skills.</h1>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-indigo-100 md:text-xl">Discover practical, trusted learning resources to build your confidence in technology, tools, and career-ready skills.</p>
+              <button
+                type="button"
+                onClick={() => document.getElementById("resources")?.scrollIntoView({ behavior: "smooth" })}
+                className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-orange-500 px-7 py-4 font-bold text-white shadow-xl transition hover:-translate-y-1 hover:bg-orange-400"
+              >
+                Explore Resources <FiArrowRight />
+              </button>
+            </motion.div>
           </div>
 
         </section>
@@ -215,8 +234,15 @@ const Learn = () => {
           className="relative overflow-hidden border-y border-indigo-100/80 bg-white/80 py-24 backdrop-blur-sm"
         >
           <div className="mx-auto max-w-7xl px-6">
+            <div className="rounded-[48px] border border-white/80 bg-white/70 p-5 shadow-[0_30px_90px_rgba(36,26,139,.12)] backdrop-blur-sm md:p-8 lg:p-10">
+            <div className="mx-auto max-w-5xl rounded-[36px] border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-orange-50 p-6 shadow-[0_20px_60px_rgba(36,26,139,.12)] md:p-10">
+              <div className="text-center">
+                <span className="text-sm font-black uppercase tracking-[0.2em] text-orange-500">Resource Finder</span>
+                <h2 className="mt-3 text-3xl font-black text-[#241A8B] md:text-4xl">Search Technologies</h2>
+                <p className="mt-3 text-slate-600">Find a resource that matches the skill you want to build next.</p>
+              </div>
 
-            <div className="mx-auto mt-16 max-w-4xl">
+            <div className="mx-auto mt-8 max-w-4xl">
 
               <div className="relative">
 
@@ -272,6 +298,8 @@ const Learn = () => {
                 technologies
 
               </p>
+
+            </div>
 
             </div>
 
@@ -416,6 +444,8 @@ const Learn = () => {
               </div>
 
             )}
+
+          </div>
 
           </div>
 

@@ -109,11 +109,11 @@ return (
 
         {/* Badge */}
 
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 backdrop-blur-xl">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-[#0B0D5C]/70 px-5 py-2 text-white shadow-lg backdrop-blur-xl">
 
           <FiHome className="text-orange-400" />
 
-          <span className="text-sm font-bold tracking-widest">
+          <span className="text-sm font-bold tracking-widest text-white">
 
             FOR COLLEGES
 
@@ -393,7 +393,7 @@ return (
 
     <div className="text-center">
 
-      <span className="inline-flex items-center rounded-full bg-indigo-100 px-5 py-2 text-sm font-bold uppercase tracking-widest text-[#241A8B]">
+      <span className="inline-flex items-center rbg-indigo-100 px-5 py-2 text-8xl font-bold uppercase tracking-widest text-[#241A8B] md:text-lg">
 
         Why NSFI
 
@@ -512,7 +512,7 @@ return (
   <div className="absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-orange-200/40 blur-3xl" />
 
   <div className="relative mx-auto max-w-7xl px-6">
-    <div className="rounded-[42px] border border-white/80 bg-white/75 p-6 shadow-[0_25px_80px_rgba(36,26,139,.12)] backdrop-blur-sm md:p-10 lg:p-12">
+    <div className="rounded-[42px] border border-indigo-100 bg-gradient-to-br from-indigo-100/80 via-white to-orange-50 p-6 shadow-[0_25px_80px_rgba(36,26,139,.14)] backdrop-blur-sm md:p-10 lg:p-12">
       <div className="text-center">
         <span className="inline-flex rounded-full border border-orange-200 bg-orange-50 px-5 py-2 text-sm font-bold uppercase tracking-widest text-orange-600 shadow-sm">
           PARTNERSHIP MODEL
@@ -558,7 +558,7 @@ return (
   <div className="absolute -right-24 top-12 h-72 w-72 rounded-full bg-orange-100/70 blur-3xl" />
   <div className="relative mx-auto max-w-7xl px-6">
     <div className="text-center">
-      <span className="inline-flex rounded-full border border-indigo-200 bg-indigo-50 px-5 py-2 text-sm font-bold uppercase tracking-widest text-[#241A8B] shadow-sm">Why NSFI</span>
+      <span className="inline-flex text-xl font-black uppercase tracking-[0.24em] text-[#241A8B] md:text-2xl">Why NSFI</span>
       <h2 className="mt-6 text-4xl font-black text-[#241A8B] md:text-5xl">Transform Your Campus</h2>
       <div className="mx-auto mt-6 h-1 w-20 rounded-full bg-gradient-to-r from-orange-400 to-indigo-600" />
       <p className="mx-auto mt-6 max-w-3xl text-center text-lg leading-8 text-gray-600">We help colleges bridge the gap between academics and industry through practical learning, certifications, internships, placement preparation and AI-powered skill development.</p>

@@ -70,9 +70,17 @@ const statusMessages = {
 };
 const AdminTracking = () => {
 
-  const [adminKey, setAdminKey] = useState("");
+  const [adminEmail, setAdminEmail] = useState(
+    () => window.sessionStorage.getItem("nsfi_admin_email") ?? "partnerships@nsfi.org.in"
+  );
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminToken, setAdminToken] = useState(
+    () => window.sessionStorage.getItem("nsfi_admin_token") ?? ""
+  );
 
-const [authenticated, setAuthenticated] = useState(false);
+const [authenticated, setAuthenticated] = useState(
+  () => Boolean(window.sessionStorage.getItem("nsfi_admin_token"))
+);
 
 const [loading, setLoading] = useState(false);
 
@@ -155,12 +163,12 @@ const dashboardStats = {
 // ================= FETCH NOTIFICATIONS =================
 
 const fetchNotifications = async () => {
-  if (!authenticated || !adminKey.trim()) return;
+  if (!authenticated || !adminToken) return;
 
   try {
-    const response = await fetch(
-      `/api/notifications?adminKey=${encodeURIComponent(adminKey)}`
-    );
+    const response = await fetch("/api/notifications", {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
 
     const data = await response.json();
 
@@ -176,9 +184,9 @@ const fetchNotifications = async () => {
 
 const loadDashboard = async () => {
   try {
-    const response = await fetch(
-      `/api/track?admin=true&adminKey=${encodeURIComponent(adminKey)}`
-    );
+    const response = await fetch("/api/track?admin=true", {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
 
     const text = await response.text();
 
@@ -221,22 +229,24 @@ const handleLogin = async (
 ) => {
   e.preventDefault();
 
-  if (!adminKey.trim()) {
-    setStatusMessage("Please enter Admin Key.");
+  if (!adminEmail.trim() || !adminPassword) {
+    setStatusMessage("Please enter your admin email and password.");
     return;
   }
 
   setLoading(true);
 
   try {
-    const response = await fetch(
-      `/api/track?admin=true&adminKey=${encodeURIComponent(adminKey)}`
-    );
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: adminEmail.trim(), password: adminPassword }),
+    });
 
     const text = await response.text();
 
     if (!response.ok) {
-      let message = "Invalid admin key";
+      let message = "Invalid admin email or password";
 
       try {
         message = JSON.parse(text).error;
@@ -247,27 +257,25 @@ const handleLogin = async (
 
     const data = JSON.parse(text);
 
-    setEnrollments(
-      (data.enrollments || []).map((item: Enrollment) => ({
-        ...item,
-        status: item.status || "received",
-      }))
-    );
-
-    setInquiries(
-      (data.inquiries || []).map((item: Inquiry) => ({
-        ...item,
-        status: item.status || "received",
-      }))
-    );
+    if (!data.token) throw new Error("Unable to create an admin session.");
 
     setAuthenticated(true);
+    setAdminToken(data.token);
+    setAdminPassword("");
+    window.sessionStorage.setItem("nsfi_admin_email", adminEmail.trim());
+    window.sessionStorage.setItem("nsfi_admin_token", data.token);
+    window.localStorage.setItem("nsfi_admin_authorized", "true");
+    window.dispatchEvent(new Event("admin-auth-changed"));
 
     setStatusMessage("");
 
-    fetchNotifications();
   } catch (err) {
     setAuthenticated(false);
+    setAdminToken("");
+    window.sessionStorage.removeItem("nsfi_admin_email");
+    window.sessionStorage.removeItem("nsfi_admin_token");
+    window.localStorage.removeItem("nsfi_admin_authorized");
+    window.dispatchEvent(new Event("admin-auth-changed"));
 
     if (err instanceof Error) {
       setStatusMessage(err.message);
@@ -294,7 +302,14 @@ const handleRefresh = async () => {
 const handleLogout = () => {
   setAuthenticated(false);
 
-  setAdminKey("");
+  setAdminToken("");
+  setAdminPassword("");
+  window.sessionStorage.removeItem("nsfi_admin_email");
+  window.sessionStorage.removeItem("nsfi_admin_token");
+  window.localStorage.removeItem("nsfi_admin_authorized");
+  window.dispatchEvent(new Event("admin-auth-changed"));
+
+  setAdminEmail("partnerships@nsfi.org.in");
 
   setEnrollments([]);
 
@@ -377,26 +392,25 @@ const updateStatus = async (
   status: string
 ) => {
   try {
-    const response = await fetch("/api/admin/status", {
+    const response = await fetch(`/api/${type}/${id}/status`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${adminToken}`,
       },
       body: JSON.stringify({
-        adminKey,
-        type,
-        id,
         status,
       }),
     });
 
     if (!response.ok) {
-      throw new Error("Unable to update.");
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(payload.error || "Unable to update status.");
     }
 
     await handleRefresh();
-  } catch {
-    alert("Status update failed.");
+  } catch (error) {
+    alert(error instanceof Error ? error.message : "Status update failed.");
   }
 };
 
@@ -413,9 +427,9 @@ const deleteRecord = async (
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${adminToken}`,
       },
       body: JSON.stringify({
-        adminKey,
         type,
         id,
       }),
@@ -445,7 +459,7 @@ useEffect(() => {
   }, 10000);
 
   return () => window.clearInterval(interval);
-}, [authenticated]);
+}, [authenticated, adminToken]);
 
 return (
   <>
@@ -485,15 +499,25 @@ return (
 
               <form onSubmit={handleLogin} className="mt-10 space-y-6">
                 <div>
-                  <label className="mb-2 block text-sm font-semibold text-gray-700">
-                    Admin Key
-                  </label>
+                  <label className="mb-2 block text-sm font-semibold text-gray-700">Admin email</label>
+
+                  <input
+                    type="email"
+                    value={adminEmail}
+                    onChange={(e) => setAdminEmail(e.target.value)}
+                    placeholder="partnerships@nsfi.org.in"
+                    className="w-full rounded-2xl border border-gray-300 px-5 py-4 outline-none transition focus:border-[#241A8B] focus:ring-2 focus:ring-[#241A8B]/20"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-gray-700">Password</label>
 
                   <input
                     type="password"
-                    value={adminKey}
-                    onChange={(e) => setAdminKey(e.target.value)}
-                    placeholder="Enter admin key"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    placeholder="Enter password"
                     className="w-full rounded-2xl border border-gray-300 px-5 py-4 outline-none transition focus:border-[#241A8B] focus:ring-2 focus:ring-[#241A8B]/20"
                   />
                 </div>

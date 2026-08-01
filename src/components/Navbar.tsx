@@ -134,7 +134,7 @@ return (
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
-      className="sticky top-0 z-50 border-b border-white/20 bg-white/80 backdrop-blur-xl shadow-xl"
+      className="sticky top-0 z-[100] w-full shrink-0 border-b border-slate-200 bg-white shadow-xl"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
@@ -182,6 +182,20 @@ return (
             Programs
           </button>
 
+          <button
+            onClick={() => handleNavigate("/faqs")}
+            className="font-semibold transition-colors duration-200 hover:text-orange-500"
+          >
+            FAQs
+          </button>
+
+          <button
+            onClick={() => handleNavigate("/learn")}
+            className="font-semibold transition-colors duration-200 hover:text-orange-500"
+          >
+            Free Resources
+          </button>
+
             {/* <button
             onClick={() => handleNavigate("/contact")}
             className="font-semibold transition-colors duration-200 hover:text-orange-500"
@@ -203,13 +217,6 @@ return (
               >
                 Track
               </button> */}
-
-              <button
-                onClick={() => handleNavigate("/learn")}
-                className="block w-full rounded-xl px-4 py-3 text-left transition hover:bg-indigo-50 hover:pl-6"
-              >
-                Free Resources
-              </button>
 
               {/* <button
                 onClick={() => handleNavigate("/contact")}
@@ -364,17 +371,24 @@ return (
         </button>
 
         <button
-          onClick={() => handleNavigate("/track")}
+          onClick={() => handleNavigate("/faqs")}
           className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
         >
-          📍 Track
+          ❓ FAQs
         </button>
 
         <button
           onClick={() => handleNavigate("/learn")}
           className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
         >
-          📚 Learn
+          📚 Free Resources
+        </button>
+
+        <button
+          onClick={() => handleNavigate("/track")}
+          className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
+        >
+          📍 Track
         </button>
 
         <button

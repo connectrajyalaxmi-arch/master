@@ -1,15 +1,66 @@
 import express from "express";
 import cors from "cors";
 import fs from "fs";
+import crypto from "crypto";
+
+try {
+  process.loadEnvFile(".env");
+} catch {
+  // The project can still run without a local .env file; admin access stays disabled.
+}
 
 const app = express();
 const PORT = process.env.PORT ?? 4000;
 const dataPath = new URL("./enrollments.json", import.meta.url);
 const inquiriesPath = new URL("./inquiries.json", import.meta.url);
 const notificationsPath = new URL("./notifications.json", import.meta.url);
+const ADMIN_EMAIL = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
+const ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || "");
+const adminSessions = new Set();
 
 app.use(cors());
 app.use(express.json());
+
+const credentialsMatch = (email, password) => {
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) return false;
+
+  const suppliedEmail = Buffer.from(String(email || "").trim().toLowerCase());
+  const configuredEmail = Buffer.from(ADMIN_EMAIL);
+  const suppliedPassword = Buffer.from(String(password || ""));
+  const configuredPassword = Buffer.from(ADMIN_PASSWORD);
+
+  const emailMatches = suppliedEmail.length === configuredEmail.length && crypto.timingSafeEqual(suppliedEmail, configuredEmail);
+  const passwordMatches = suppliedPassword.length === configuredPassword.length && crypto.timingSafeEqual(suppliedPassword, configuredPassword);
+
+  return emailMatches && passwordMatches;
+};
+
+const requireAdmin = (req, res) => {
+  const token = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "").trim();
+
+  if (!token || !adminSessions.has(token)) {
+    res.status(403).json({ error: "Administrator access is required." });
+    return false;
+  }
+
+  return true;
+};
+
+app.post("/api/admin/login", (req, res) => {
+  const { email, password } = req.body;
+
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    return res.status(503).json({ error: "Admin login is not configured. Add ADMIN_EMAIL and ADMIN_PASSWORD to .env." });
+  }
+
+  if (!credentialsMatch(email, password)) {
+    return res.status(401).json({ error: "Invalid admin email or password." });
+  }
+
+  const token = crypto.randomBytes(32).toString("hex");
+  adminSessions.add(token);
+  return res.json({ success: true, token });
+});
 
 const readEnrollments = () => {
   try {
@@ -125,13 +176,10 @@ app.get("/api/enrollments", (req, res) => {
 });
 
 app.put("/api/enrollment/:id/status", (req, res) => {
-  const adminKey = req.body.adminKey;
   const { status } = req.body;
   const id = parseInt(req.params.id);
 
-  if (adminKey !== "admin123") {
-    return res.status(403).json({ error: "Invalid admin key." });
-  }
+  if (!requireAdmin(req, res)) return;
 
   if (!["received", "under-review", "processing", "completed"].includes(status)) {
     return res.status(400).json({ error: "Invalid status." });
@@ -151,13 +199,10 @@ app.put("/api/enrollment/:id/status", (req, res) => {
 });
 
 app.put("/api/inquiry/:id/status", (req, res) => {
-  const adminKey = req.body.adminKey;
   const { status } = req.body;
   const id = parseInt(req.params.id);
 
-  if (adminKey !== "admin123") {
-    return res.status(403).json({ error: "Invalid admin key." });
-  }
+  if (!requireAdmin(req, res)) return;
 
   if (!["received", "under-review", "processing", "completed"].includes(status)) {
     return res.status(400).json({ error: "Invalid status." });
@@ -176,26 +221,42 @@ app.put("/api/inquiry/:id/status", (req, res) => {
   return res.json({ success: true, inquiry });
 });
 
-app.get("/api/notifications", (req, res) => {
-  const adminKey = String(req.query.adminKey || "").trim();
+app.delete("/api/admin/delete", (req, res) => {
+  if (!requireAdmin(req, res)) return;
 
-  if (adminKey !== "admin123") {
-    return res.status(403).json({ error: "Invalid admin key." });
+  const { type, id } = req.body;
+  const recordId = Number(id);
+
+  if (!Number.isInteger(recordId) || !["enrollment", "inquiry"].includes(type)) {
+    return res.status(400).json({ error: "Invalid record." });
   }
+
+  const entries = type === "enrollment" ? readEnrollments() : readInquiries();
+  const nextEntries = entries.filter((entry) => entry.id !== recordId);
+
+  if (nextEntries.length === entries.length) {
+    return res.status(404).json({ error: "Record not found." });
+  }
+
+  if (type === "enrollment") saveEnrollments(nextEntries);
+  else saveInquiries(nextEntries);
+
+  return res.json({ success: true });
+});
+
+app.get("/api/notifications", (req, res) => {
+  if (!requireAdmin(req, res)) return;
 
   return res.json({ notifications: readNotifications().slice(0, 10) });
 });
 
 app.get("/api/track", (req, res) => {
   const isAdmin = req.query.admin === "true";
-  const adminKey = String(req.query.adminKey || "").trim();
   const email = String(req.query.email || "").trim().toLowerCase();
 
   // Admin access
   if (isAdmin) {
-    if (adminKey !== "admin123") {
-      return res.status(403).json({ error: "Invalid admin key." });
-    }
+    if (!requireAdmin(req, res)) return;
     const enrollments = readEnrollments().map((e) => ({
       ...e,
       status: e.status || "received"

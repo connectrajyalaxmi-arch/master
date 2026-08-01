@@ -16,6 +16,7 @@ interface Account {
   name: string;
   dob: string;
   email: string;
+  phone?: string;
   password: string;
 }
 
@@ -100,6 +101,7 @@ const Login = () => {
 
     localStorage.setItem("nsfi_user_name", account.name);
     localStorage.setItem("nsfi_user_dob", account.dob);
+    localStorage.setItem("nsfi_user_phone", account.phone || "");
 
     window.dispatchEvent(
       new Event("user-auth-changed")
