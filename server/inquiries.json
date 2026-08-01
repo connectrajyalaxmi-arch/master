@@ -94,5 +94,17 @@
     "category": "software-development",
     "status": "received",
     "createdAt": "2026-07-12T16:12:19.706Z"
+  },
+  {
+    "id": 1784955922037,
+    "companyName": "infy",
+    "contactName": "john",
+    "email": "john@gmail.com",
+    "phone": "91029922223",
+    "industry": "IT",
+    "message": "",
+    "category": "Partnership",
+    "status": "received",
+    "createdAt": "2026-07-25T05:05:22.037Z"
   }
 ]

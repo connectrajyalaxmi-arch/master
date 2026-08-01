@@ -1,5 +1,61 @@
 [
   {
+    "id": 1785553492385,
+    "type": "enrollment",
+    "title": "New enrollment received",
+    "message": "Raj Ravi requested enrollment for AI Fundamentals.",
+    "createdAt": "2026-08-01T03:04:52.385Z",
+    "read": false
+  },
+  {
+    "id": 1785515218661,
+    "type": "enrollment",
+    "title": "New enrollment received",
+    "message": "mike requested enrollment for AI Fundamentals.",
+    "createdAt": "2026-07-31T16:26:58.661Z",
+    "read": false
+  },
+  {
+    "id": 1785514903866,
+    "type": "enrollment",
+    "title": "New enrollment received",
+    "message": "mike requested enrollment for Customized Learning.",
+    "createdAt": "2026-07-31T16:21:43.866Z",
+    "read": false
+  },
+  {
+    "id": 1785514892218,
+    "type": "enrollment",
+    "title": "New enrollment received",
+    "message": "mike requested enrollment for Customized Learning.",
+    "createdAt": "2026-07-31T16:21:32.218Z",
+    "read": false
+  },
+  {
+    "id": 1784955922038,
+    "type": "inquiry",
+    "title": "New inquiry received",
+    "message": "john submitted a new inquiry for Partnership.",
+    "createdAt": "2026-07-25T05:05:22.038Z",
+    "read": false
+  },
+  {
+    "id": 1784950857903,
+    "type": "enrollment",
+    "title": "New enrollment received",
+    "message": "Shiva requested enrollment for AI Fundamentals.",
+    "createdAt": "2026-07-25T03:40:57.903Z",
+    "read": false
+  },
+  {
+    "id": 1784907511564,
+    "type": "enrollment",
+    "title": "New enrollment received",
+    "message": "John Roy requested enrollment for AI Fundamentals.",
+    "createdAt": "2026-07-24T15:38:31.564Z",
+    "read": false
+  },
+  {
     "id": 1784045850810,
     "type": "enrollment",
     "title": "New enrollment received",

@@ -1,8 +1,6 @@
 @import "tailwindcss";
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
@@ -14,15 +12,35 @@ body {
   background: #fffaf6;
   min-height: 100vh;
 }
+@keyframes floating{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-14px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+.animate-floating{
+animation:floating 5s ease-in-out infinite;
+}
 
 #root {
   min-height: 100vh;
 }
 
 .app-shell {
-  width: min(100%, 1280px);
-  margin: 0 auto;
-  padding: 24px 20px 48px;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 @media (min-width: 768px) {

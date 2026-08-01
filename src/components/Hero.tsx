@@ -1,60 +1,240 @@
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import Tilt from "react-parallax-tilt";
+
+import {
+  FiArrowRight,
+  FiUsers,
+  FiBookOpen,
+  FiAward,
+  FiTrendingUp,
+} from "react-icons/fi";
+
 import heroImage from "../assets/hero.jpg.jpeg";
 
 const Hero = () => {
-  return (
-    <section className="relative overflow-hidden">
+  const navigate = useNavigate();
 
-      <img
-        src={heroImage}
-        alt="Students" 
-        className="absolute inset-0 w-full h-full object-cover"
+  return (
+    <section className="relative min-h-screen overflow-hidden bg-[#080b1a]">
+
+      {/* Animated Background */}
+
+      <motion.div
+        animate={{
+          x: [0, 100, -80, 0],
+          y: [0, -80, 60, 0],
+          scale: [1, 1.3, 0.9, 1],
+        }}
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+        }}
+        className="absolute -left-20 top-20 h-96 w-96 rounded-full bg-indigo-500/30 blur-3xl"
       />
 
-      <div className="absolute inset-0 bg-black/50"></div>
+      <motion.div
+        animate={{
+          x: [0, -120, 80, 0],
+          y: [0, 100, -50, 0],
+          scale: [1, 0.8, 1.2, 1],
+        }}
+        transition={{
+          duration: 22,
+          repeat: Infinity,
+        }}
+        className="absolute right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-orange-500/20 blur-3xl"
+      />
 
-      <div className="relative z-20 w-full bg-orange-500/95 text-white py-3 text-center">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-sm md:text-base font-semibold">
-            National Skill Forge Institute — empowering students with industry-aligned skills
-          </div>
+      {/* Background Image */}
+
+      <motion.img
+        initial={{ scale: 1.15 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 8 }}
+        src={heroImage}
+        alt="Students"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+
+      {/* Overlay */}
+
+      <div className="absolute inset-0 bg-gradient-to-r from-[#241A8B]/90 via-[#241A8B]/70 to-black/60" />
+
+      {/* Announcement */}
+
+      <motion.div
+        initial={{ y: -80 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="relative z-20 bg-orange-500 py-3 text-center font-semibold text-white"
+      >
+        National Skill Forge Institute — Empowering Students with Industry-Ready Skills
+      </motion.div>
+
+      <div className="relative z-20 mx-auto flex min-h-[calc(100vh-48px)] max-w-7xl items-center px-6">
+
+        <div className="grid w-full items-center gap-16 lg:grid-cols-2">
+
+          {/* LEFT */}
+
+          <motion.div
+            initial={{ opacity: 0, x: -80 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+
+            <motion.span
+              whileHover={{ scale: 1.08 }}
+              className="inline-flex rounded-full bg-orange-500 px-5 py-2 text-sm font-semibold text-white shadow-lg"
+            >
+              🚀 India's Future Begins Here
+            </motion.span>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mt-8 text-5xl font-black leading-tight text-white md:text-7xl"
+            >
+              Build Skills.
+              <br />
+              Create Careers.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="mt-8 max-w-xl text-lg leading-8 text-gray-200"
+            >
+              Unlock your potential with industry-focused programs,
+              expert mentors, live projects, certifications and
+              placement assistance designed for tomorrow's workforce.
+            </motion.p>
+
+            <div className="mt-10 flex flex-wrap gap-5">
+
+              <motion.button
+                whileHover={{
+                  scale: 1.05,
+                  y: -5,
+                }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/programs")}
+                className="flex items-center gap-3 rounded-2xl bg-orange-500 px-8 py-4 font-bold text-white shadow-xl"
+              >
+                Explore Programs
+                <FiArrowRight />
+              </motion.button>
+
+              <motion.button
+                whileHover={{
+                  scale: 1.05,
+                  y: -5,
+                }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/contact")}
+                className="rounded-2xl border-2 border-white px-8 py-4 font-bold text-white hover:bg-white hover:text-[#241A8B]"
+              >
+                Contact Us
+              </motion.button>
+
+            </div>
+
+          </motion.div>
+
+          {/* RIGHT */}
+
+          <motion.div
+            initial={{ opacity: 0, x: 80 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1 }}
+            className="grid gap-6 sm:grid-cols-2"
+          >
+
+            {[
+              {
+                icon: <FiUsers className="text-5xl text-orange-400" />,
+                number: "50K+",
+                text: "Students Trained",
+              },
+              {
+                icon: <FiBookOpen className="text-5xl text-orange-400" />,
+                number: "200+",
+                text: "Skill Programs",
+              },
+              {
+                icon: <FiAward className="text-5xl text-orange-400" />,
+                number: "96%",
+                text: "Placement Support",
+              },
+              {
+                icon: <FiTrendingUp className="text-5xl text-orange-400" />,
+                number: "25+",
+                text: "Industry Partners",
+              },
+            ].map((card, index) => (
+
+              <Tilt
+                key={index}
+                glareEnable={true}
+                glareMaxOpacity={0.3}
+                scale={1.05}
+                tiltMaxAngleX={12}
+                tiltMaxAngleY={12}
+              >
+
+                <motion.div
+                  whileHover={{
+                    y: -10,
+                  }}
+                  className="rounded-3xl border border-white/20 bg-white/10 p-8 backdrop-blur-xl shadow-2xl"
+                >
+
+                  {card.icon}
+
+                  <h2 className="mt-5 text-4xl font-black text-white">
+                    {card.number}
+                  </h2>
+
+                  <p className="mt-2 text-gray-200">
+                    {card.text}
+                  </p>
+
+                </motion.div>
+
+              </Tilt>
+
+            ))}
+
+          </motion.div>
+
         </div>
+
       </div>
 
-      <div className="relative w-full mx-auto px-6 py-16 lg:py-20 flex flex-col items-center justify-center z-20">
+      {/* Scroll */}
 
-        <div className="text-white w-full">
+      <motion.div
+        animate={{
+          y: [0, 12, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 1.5,
+        }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+      >
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-center" style={{letterSpacing: '-1px'}}>
-            You're More Than a Resume
-          </h1>
+        <div className="flex h-12 w-7 justify-center rounded-full border-2 border-white">
 
-          <p className="text-lg md:text-xl text-gray-100 font-light leading-relaxed mb-8 w-full text-center">
-            In a competitive world, what sets you apart isn't just what you know—it's who you become.
-            We believe in uncovering your unique potential and building skills that reflect your individuality.
-          </p>
+          <div className="mt-2 h-3 w-1 rounded-full bg-white"></div>
 
-          <p className="text-base md:text-lg text-gray-200 font-light leading-relaxed mb-20 w-full text-center">
-            Discover a program that aligns with your aspirations and transforms how you see yourself.
-          </p>
-
-          {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
-            <button
-              onClick={() => navigate("/programs")}
-              className="w-full sm:w-auto px-14 py-6 text-lg font-semibold rounded-none bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg hover:shadow-2xl transform hover:-translate-y-0.5 transition"
-            >
-              Explore Your Path
-            </button>
-
-            <button
-              onClick={() => navigate("/inquiry")}
-              className="w-full sm:w-auto px-14 py-6 text-lg font-semibold rounded-none bg-transparent text-white border-2 border-white hover:bg-white/10 hover:shadow transform hover:-translate-y-0.5 transition"
-            >
-              Tell Us About You
-            </button>
-          </div> */}
         </div>
 
-      </div>
+      </motion.div>
+
     </section>
   );
 };

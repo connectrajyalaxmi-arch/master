@@ -1,201 +1,638 @@
+import { useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { motion } from "framer-motion";
+import Tilt from "react-parallax-tilt";
+
+import heroImg from "../assets/hero.jpg.jpeg";
+
+import {
+  FiArrowRight,
+  FiBook,
+  FiSearch,
+  FiClock,
+  FiExternalLink,
+  FiCode,
+  FiDatabase,
+  FiTool,
+  FiMonitor,
+  FiCheckCircle,
+} from "react-icons/fi";
 
 const resources = [
   {
     title: "HTML",
     icon: "🌐",
-    description: "Learn the structure and fundamentals of web pages.",
+    description:
+      "Learn the structure and semantic foundation of modern web pages.",
     url: "https://developer.mozilla.org/en-US/docs/Web/HTML",
-    color: "bg-orange-100",
+    category: "Frontend",
+    difficulty: "Beginner",
+    duration: "2 Hours",
+    color: "from-orange-500 to-red-400",
   },
   {
     title: "CSS",
     icon: "🎨",
-    description: "Create beautiful and responsive websites using CSS.",
+    description:
+      "Master responsive layouts, animations, flexbox, grid and modern UI.",
     url: "https://developer.mozilla.org/en-US/docs/Web/CSS",
-    color: "bg-blue-100",
+    category: "Frontend",
+    difficulty: "Beginner",
+    duration: "4 Hours",
+    color: "from-sky-500 to-cyan-400",
   },
   {
     title: "JavaScript",
     icon: "⚡",
-    description: "Master JavaScript from beginner to advanced concepts.",
+    description:
+      "Understand modern JavaScript from fundamentals to ESNext features.",
     url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-    color: "bg-yellow-100",
+    category: "Frontend",
+    difficulty: "Intermediate",
+    duration: "8 Hours",
+    color: "from-yellow-400 to-orange-400",
   },
   {
     title: "React",
     icon: "⚛️",
-    description: "Build modern user interfaces using React.",
+    description:
+      "Build fast and interactive user interfaces using React.",
     url: "https://react.dev/",
-    color: "bg-cyan-100",
+    category: "Frontend",
+    difficulty: "Intermediate",
+    duration: "10 Hours",
+    color: "from-cyan-500 to-blue-500",
   },
   {
     title: "TypeScript",
     icon: "🔷",
-    description: "Write scalable JavaScript applications with TypeScript.",
+    description:
+      "Write scalable and maintainable applications with TypeScript.",
     url: "https://www.typescriptlang.org/docs/",
-    color: "bg-indigo-100",
+    category: "Frontend",
+    difficulty: "Intermediate",
+    duration: "8 Hours",
+    color: "from-blue-600 to-indigo-600",
   },
   {
     title: "Node.js",
     icon: "🟢",
-    description: "Develop powerful backend applications using Node.js.",
+    description:
+      "Develop high-performance backend applications with Node.js.",
     url: "https://nodejs.org/en/docs",
-    color: "bg-green-100",
+    category: "Backend",
+    difficulty: "Intermediate",
+    duration: "8 Hours",
+    color: "from-green-500 to-emerald-500",
   },
   {
     title: "Express.js",
     icon: "🚀",
-    description: "Create REST APIs and backend services with Express.",
+    description:
+      "Build REST APIs and scalable backend services using Express.",
     url: "https://expressjs.com/",
-    color: "bg-gray-100",
+    category: "Backend",
+    difficulty: "Intermediate",
+    duration: "5 Hours",
+    color: "from-slate-500 to-gray-700",
   },
   {
     title: "MongoDB",
     icon: "🍃",
-    description: "Learn NoSQL database development with MongoDB.",
+    description:
+      "Learn NoSQL database design and development with MongoDB.",
     url: "https://www.mongodb.com/docs/",
-    color: "bg-green-50",
+    category: "Database",
+    difficulty: "Intermediate",
+    duration: "6 Hours",
+    color: "from-green-600 to-lime-500",
   },
   {
     title: "Git",
     icon: "🐙",
-    description: "Version control and collaboration using Git.",
+    description:
+      "Track changes and collaborate efficiently using Git.",
     url: "https://git-scm.com/doc",
-    color: "bg-red-100",
+    category: "Tools",
+    difficulty: "Beginner",
+    duration: "2 Hours",
+    color: "from-red-500 to-orange-500",
   },
   {
     title: "GitHub",
     icon: "💻",
-    description: "Host and collaborate on software projects.",
+    description:
+      "Host projects, collaborate with teams and contribute to open source.",
     url: "https://docs.github.com/",
-    color: "bg-slate-100",
+    category: "Tools",
+    difficulty: "Beginner",
+    duration: "2 Hours",
+    color: "from-gray-700 to-black",
   },
 ];
 
+const categories = [
+  "All",
+  "Frontend",
+  "Backend",
+  "Database",
+  "Tools",
+];
+
 const Learn = () => {
+
+  const [search, setSearch] = useState("");
+
+  const [category, setCategory] = useState("All");
+
+  const filteredResources = useMemo(() => {
+
+    return resources.filter((item) => {
+
+      const matchesSearch =
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase());
+
+      const matchesCategory =
+        category === "All" || item.category === category;
+
+      return matchesSearch && matchesCategory;
+
+    });
+
+  }, [search, category]);
+
   return (
+
     <>
+
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="bg-[#241A8B] text-white py-20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-6">
-            Free Learning Resources
-          </h1>
+      <div className="relative isolate overflow-hidden bg-[#f7f8ff]">
 
-          <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-            Explore official documentation and learning materials for the
-            latest web development technologies. These resources are trusted by
-            developers worldwide.
-          </p>
+        {/* Background */}
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[radial-gradient(circle_at_top_left,_#e0e7ff_0,_transparent_30%),radial-gradient(circle_at_85%_35%,_#ffedd5_0,_transparent_25%),linear-gradient(135deg,_#f8faff_0%,_#ffffff_45%,_#f5f3ff_100%)]"
+        >
+
+          <div className="absolute -left-40 top-[28%] h-[34rem] w-[34rem] rounded-full bg-indigo-300/35 blur-3xl" />
+
+          <div className="absolute -right-36 top-[47%] h-[30rem] w-[30rem] rounded-full bg-orange-300/30 blur-3xl" />
+
+          <div className="absolute bottom-[8%] left-[38%] h-80 w-80 rotate-45 rounded-[5rem] border border-indigo-200/60 bg-white/30 shadow-[0_35px_90px_rgba(79,70,229,.12)] backdrop-blur-sm" />
+
+          <div className="absolute inset-0 opacity-[0.045] bg-[linear-gradient(#241A8B_1px,transparent_1px),linear-gradient(to_right,#241A8B_1px,transparent_1px)] bg-[size:64px_64px]" />
+
         </div>
-      </section>
+                {/* =========================================================
+              HERO SECTION
+        ========================================================= */}
 
-      {/* Resources */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#120f4d] via-[#241A8B] to-[#4431d8] text-white">
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Animated Background */}
 
-            {resources.map((item) => (
+          <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-2">
 
-              <div
-                key={item.title}
-                className="bg-white rounded-none shadow-lg hover:shadow-2xl transition duration-300 border"
-              >
+            Free Resources
+          </div>
 
-                <div className={`${item.color} p-8 text-center`}>
+        </section>
 
-                  <div className="text-6xl">
-                    {item.icon}
-                  </div>
+        <div
+          aria-hidden="true"
+          className="relative z-10 mx-auto h-px w-[calc(100%-3rem)] max-w-6xl bg-gradient-to-r from-transparent via-orange-400/70 to-transparent"
+        />
+                {/* =========================================================
+              LEARNING RESOURCES
+        ========================================================= */}
+
+        <section
+          id="resources"
+          className="relative overflow-hidden border-y border-indigo-100/80 bg-white/80 py-24 backdrop-blur-sm"
+        >
+          <div className="mx-auto max-w-7xl px-6">
+
+            <div className="mx-auto mt-16 max-w-4xl">
+
+              <div className="relative">
+
+                <FiSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl text-gray-400" />
+
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search technologies..."
+                  className="w-full rounded-3xl border border-gray-200 bg-white py-5 pl-16 pr-6 text-lg shadow-xl outline-none transition-all duration-300 focus:border-[#241A8B] focus:ring-4 focus:ring-indigo-100"
+                />
+
+              </div>
+
+            </div>
+
+            {/* Filters */}
+
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+
+              {categories.map((item) => (
+
+                <button
+                  key={item}
+                  onClick={() => setCategory(item)}
+                  className={`rounded-full px-6 py-3 font-semibold transition-all duration-300 ${
+                    category === item
+                      ? "bg-[#241A8B] text-white shadow-xl"
+                      : "border bg-white hover:bg-indigo-50"
+                  }`}
+                >
+                  {item}
+                </button>
+
+              ))}
+
+            </div>
+
+            {/* Counter */}
+
+            <div className="mt-10 text-center">
+
+              <p className="font-semibold text-gray-500">
+
+                Showing
+
+                <span className="mx-2 font-bold text-[#241A8B]">
+
+                  {filteredResources.length}
+
+                </span>
+
+                technologies
+
+              </p>
+
+            </div>
+
+            {/* Cards */}
+
+            <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+
+              {filteredResources.map((item, index) => (
+
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 70 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: .6,
+                    delay: index * .08,
+                  }}
+                >
+
+                  <Tilt
+                    glareEnable
+                    glareMaxOpacity={0.25}
+                    scale={1.03}
+                  >
+
+                    <div className="group relative overflow-hidden rounded-[32px] border border-white bg-white/90 p-8 shadow-xl backdrop-blur transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_25px_70px_rgba(36,26,139,.18)]">
+
+                      {/* Gradient */}
+
+                      <div className={`absolute right-0 top-0 h-36 w-36 rounded-full bg-gradient-to-br ${item.color} opacity-10 blur-3xl transition duration-500 group-hover:scale-150`} />
+
+                      {/* Icon */}
+
+                      <div className={`flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br ${item.color} text-4xl shadow-xl`}>
+
+                        {item.icon}
+
+                      </div>
+
+                      {/* Title */}
+
+                      <h3 className="mt-7 text-3xl font-black text-[#241A8B]">
+
+                        {item.title}
+
+                      </h3>
+
+                      {/* Category */}
+
+                      <span className="mt-3 inline-block rounded-full bg-indigo-100 px-4 py-1 text-sm font-semibold text-[#241A8B]">
+
+                        {item.category}
+
+                      </span>
+
+                      {/* Description */}
+
+                      <p className="mt-6 leading-8 text-gray-600">
+
+                        {item.description}
+
+                      </p>
+
+                      {/* Info */}
+
+                      <div className="mt-8 flex items-center justify-between">
+
+                        <div className="flex items-center gap-2 text-sm font-semibold text-orange-500">
+
+                          <FiBook />
+
+                          {item.difficulty}
+
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm font-semibold text-green-600">
+
+                          <FiClock />
+
+                          {item.duration}
+
+                        </div>
+
+                      </div>
+
+                      {/* Badge */}
+
+                      <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-indigo-600">
+
+                        <FiCheckCircle />
+
+                        Official Documentation
+
+                      </div>
+
+                      {/* Button */}
+
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-8 flex items-center justify-center gap-3 rounded-2xl bg-[#241A8B] px-6 py-4 font-bold text-white transition-all duration-300 hover:bg-orange-500"
+                      >
+
+                        Visit Documentation
+
+                        <FiExternalLink />
+
+                      </a>
+
+                    </div>
+
+                  </Tilt>
+
+                </motion.div>
+
+              ))}
+
+            </div>
+
+            {/* Empty State */}
+
+            {filteredResources.length === 0 && (
+
+              <div className="py-24 text-center">
+
+                <FiSearch className="mx-auto text-6xl text-gray-300" />
+
+                <h3 className="mt-6 text-3xl font-bold text-[#241A8B]">
+
+                  No technologies found
+
+                </h3>
+
+                <p className="mt-4 text-gray-500">
+
+                  Try searching with another keyword or choose a different category.
+
+                </p>
+
+              </div>
+
+            )}
+
+          </div>
+
+        </section>
+                {/* =========================================================
+              LEARNING ROADMAP
+        ========================================================= */}
+
+      
+                {/* =========================================================
+              WHY LEARN FROM OFFICIAL DOCUMENTATION
+        ========================================================= */}
+
+        <section className="relative overflow-hidden border-y border-indigo-100/80 bg-white py-24">
+
+          <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-indigo-200/30 blur-3xl" />
+
+          <div className="absolute -right-32 bottom-10 h-80 w-80 rounded-full bg-orange-200/30 blur-3xl" />
+
+          <div className="relative mx-auto max-w-7xl px-6">
+
+            {/* Heading */}
+
+            <div className="text-center">
+
+              <span className="inline-flex rounded-full border border-indigo-200 bg-indigo-50 px-5 py-2 text-sm font-bold uppercase tracking-widest text-[#241A8B]">
+
+                WHY OFFICIAL DOCS
+
+              </span>
+
+              <h2 className="mt-6 text-4xl font-black text-[#241A8B] md:text-5xl">
+
+                Learn From The Source
+
+              </h2>
+
+              <div className="mx-auto mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-orange-400 to-indigo-600" />
+
+              <p className="mx-auto mt-8 max-w-3xl text-lg leading-8 text-gray-600">
+
+                Official documentation is written and maintained by the teams
+                who build these technologies. It provides the latest features,
+                best practices, and accurate implementation guidance.
+
+              </p>
+
+            </div>
+
+            {/* Feature Cards */}
+
+            <div className="mt-20 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+
+              {[
+                {
+                  icon: "🚀",
+                  title: "Always Updated",
+                  description:
+                    "Access the newest features, improvements, and documentation directly from the technology creators.",
+                  color: "from-orange-500 to-red-500",
+                },
+                {
+                  icon: "✔️",
+                  title: "Trusted Source",
+                  description:
+                    "Learn using official guides instead of outdated tutorials or unofficial references.",
+                  color: "from-indigo-600 to-blue-500",
+                },
+                {
+                  icon: "💼",
+                  title: "Industry Standard",
+                  description:
+                    "Professional developers rely on official documentation every day while building software.",
+                  color: "from-green-500 to-emerald-500",
+                },
+                {
+                  icon: "📚",
+                  title: "Real Examples",
+                  description:
+                    "Discover practical examples, sample code, and implementation patterns used in real projects.",
+                  color: "from-cyan-500 to-sky-500",
+                },
+                {
+                  icon: "⚡",
+                  title: "Better Learning",
+                  description:
+                    "Develop deeper understanding by learning concepts directly from their original documentation.",
+                  color: "from-yellow-400 to-orange-400",
+                },
+                {
+                  icon: "🎯",
+                  title: "Career Ready",
+                  description:
+                    "Build knowledge that aligns with modern development practices used across the industry.",
+                  color: "from-violet-600 to-fuchsia-500",
+                },
+              ].map((feature, index) => (
+
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 60 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: .6,
+                    delay: index * .08,
+                  }}
+                >
+
+                  <Tilt
+                    glareEnable
+                    glareMaxOpacity={0.25}
+                    scale={1.03}
+                  >
+
+                    <div className="group relative overflow-hidden rounded-[32px] border border-white bg-white p-8 shadow-xl transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_25px_60px_rgba(36,26,139,.18)]">
+
+                      <div className={`absolute right-0 top-0 h-40 w-40 rounded-full bg-gradient-to-br ${feature.color} opacity-10 blur-3xl transition duration-500 group-hover:scale-150`} />
+
+                      <div className={`flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br ${feature.color} text-4xl shadow-lg`}>
+
+                        {feature.icon}
+
+                      </div>
+
+                      <h3 className="mt-8 text-2xl font-black text-[#241A8B]">
+
+                        {feature.title}
+
+                      </h3>
+
+                      <p className="mt-5 leading-8 text-gray-600">
+
+                        {feature.description}
+
+                      </p>
+
+                    </div>
+
+                  </Tilt>
+
+                </motion.div>
+
+              ))}
+
+            </div>
+
+            {/* Bottom Banner */}
+
+            {/* <div className="mt-24 rounded-[36px] bg-gradient-to-r from-[#241A8B] via-[#3225a5] to-[#4b3ad7] p-10 text-white shadow-2xl">
+
+              <div className="grid items-center gap-10 lg:grid-cols-3">
+
+                <div>
+
+                  <h3 className="text-3xl font-black">
+
+                    Learn Smarter
+
+                  </h3>
+
+                  <p className="mt-4 leading-8 text-indigo-100">
+
+                    Build strong fundamentals using trusted resources before
+                    moving to advanced projects and frameworks.
+
+                  </p>
 
                 </div>
 
-                <div className="p-8">
+                <div className="text-center">
 
-                  <h2 className="text-2xl font-bold text-[#241A8B] mb-4">
-                    {item.title}
+                  <h2 className="text-5xl font-black text-orange-300">
+
+                    100%
+
                   </h2>
 
-                  <p className="text-gray-600 mb-6">
-                    {item.description}
+                  <p className="mt-2 text-indigo-100">
+
+                    Official Resources
+
                   </p>
 
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block w-full text-center bg-[#241A8B] text-white py-3 font-semibold hover:bg-[#1b1464] transition"
-                  >
-                    Visit Official Website
-                  </a>
+                </div>
+
+                <div className="text-center">
+
+                  <h2 className="text-5xl font-black text-orange-300">
+
+                    Free
+
+                  </h2>
+
+                  <p className="mt-2 text-indigo-100">
+
+                    Forever Accessible
+
+                  </p>
 
                 </div>
 
               </div>
 
-            ))}
-
-          </div>
-        </div>
-      </section>
-
-      {/* Why Learn */}
-      <section className="py-20 bg-white">
-
-        <div className="max-w-6xl mx-auto px-6">
-
-          <h2 className="text-4xl font-bold text-center text-[#241A8B] mb-12">
-            Why Learn From Official Documentation?
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-8">
-
-            <div className="border p-8 shadow">
-              <h3 className="text-xl font-bold mb-3">
-                ✅ Latest Content
-              </h3>
-
-              <p className="text-gray-600">
-                Official documentation is always updated with the newest
-                features and best practices.
-              </p>
-            </div>
-
-            <div className="border p-8 shadow">
-              <h3 className="text-xl font-bold mb-3">
-                📚 Trusted Source
-              </h3>
-
-              <p className="text-gray-600">
-                Learn directly from the creators and maintainers of the
-                technology.
-              </p>
-            </div>
-
-            <div className="border p-8 shadow">
-              <h3 className="text-xl font-bold mb-3">
-                🚀 Career Ready
-              </h3>
-
-              <p className="text-gray-600">
-                Build real-world skills that companies expect from developers.
-              </p>
-            </div>
+            </div> */}
 
           </div>
 
-        </div>
-
-      </section>
+        </section>
+      </div>
 
       <Footer />
+
     </>
+
   );
+
 };
 
 export default Learn;
