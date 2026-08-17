@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/nsfi-logo.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isAdminRoute = location.pathname === "/admin";
 
   const [isAdminAuthorized, setIsAdminAuthorized] = useState(() => {
     if (typeof window === "undefined") return false;
-    return window.localStorage.getItem("nsfi_admin_authorized") === "true";
+    return Boolean(window.sessionStorage.getItem("nsfi_admin_token"));
   });
 
   const [userEmail, setUserEmail] = useState<string | null>(() => {
@@ -42,7 +44,7 @@ const Navbar = () => {
   useEffect(() => {
     const syncAuthStatus = () => {
       setIsAdminAuthorized(
-        window.localStorage.getItem("nsfi_admin_authorized") === "true"
+        Boolean(window.sessionStorage.getItem("nsfi_admin_token"))
       );
 
       setUserEmail(
@@ -260,7 +262,7 @@ return (
                 Contact
               </button> */}
 
-              {isAdminAuthorized && (
+              {isAdminRoute && isAdminAuthorized && (
                 <button
                   onClick={() => handleNavigate("/admin")}
                   className="mt-2 block w-full rounded-xl bg-indigo-100 px-4 py-3 text-left font-bold text-[#241A8B]"
@@ -433,7 +435,7 @@ return (
           📞 Contact
         </button>
 
-        {isAdminAuthorized && (
+        {isAdminRoute && isAdminAuthorized && (
           <button
             onClick={() => handleNavigate("/admin")}
             className="block w-full rounded-xl bg-indigo-100 px-5 py-4 text-left font-bold text-[#241A8B]"

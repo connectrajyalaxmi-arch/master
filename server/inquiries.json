@@ -130,5 +130,29 @@
     "category": "Contact Us",
     "status": "received",
     "createdAt": "2026-08-01T05:46:52.925Z"
+  },
+  {
+    "id": 1785646267628,
+    "companyName": "",
+    "contactName": "Rajyalaxmi",
+    "email": "VMTW@gmail.com",
+    "phone": "9550232757",
+    "industry": "College",
+    "message": "Subject: Java, HTML\n\nNA",
+    "category": "Contact Us",
+    "status": "processing",
+    "createdAt": "2026-08-02T04:51:07.628Z"
+  },
+  {
+    "id": 1785658352118,
+    "companyName": "",
+    "contactName": "Punith",
+    "email": "accenture@gmail.com",
+    "phone": "8267786788",
+    "industry": "Professional",
+    "message": "Subject: 1.JAVA, CSS, React\n\n",
+    "category": "Contact Us",
+    "status": "received",
+    "createdAt": "2026-08-02T08:12:32.119Z"
   }
 ]

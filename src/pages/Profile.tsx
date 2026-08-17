@@ -12,7 +12,9 @@ import {
   FiLogOut,
   FiCheckCircle,
   FiActivity,
+  FiDownload,
 } from "react-icons/fi";
+import { downloadCertificate } from "../utils/certificate";
 
 interface Enrollment {
   id: number;
@@ -50,6 +52,8 @@ const Profile = () => {
 
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
+  const [downloadingCertificateId, setDownloadingCertificateId] = useState<number | null>(null);
+  const [certificateMessage, setCertificateMessage] = useState("");
 
   const loadDashboard = async (email: string) => {
   try {
@@ -104,7 +108,7 @@ useEffect(() => {
   }
 }, []);
 
-    const handleLogout = () => {
+  const handleLogout = () => {
     localStorage.removeItem("nsfi_user_email");
     localStorage.removeItem("nsfi_user_name");
     localStorage.removeItem("nsfi_user_dob");
@@ -113,6 +117,20 @@ useEffect(() => {
     window.dispatchEvent(new Event("user-auth-changed"));
 
     navigate("/");
+  };
+
+  const handleCertificateDownload = async (enrollment: Enrollment) => {
+    setCertificateMessage("");
+    setDownloadingCertificateId(enrollment.id);
+
+    try {
+      await downloadCertificate(enrollment.name || userName, enrollment.program);
+    } catch (error) {
+      console.error("Certificate generation failed:", error);
+      setCertificateMessage("Unable to download the certificate. Please try again.");
+    } finally {
+      setDownloadingCertificateId(null);
+    }
   };
     return (
     <>
@@ -360,6 +378,12 @@ useEffect(() => {
     </div>
   )}
 
+  {certificateMessage && (
+    <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
+      {certificateMessage}
+    </div>
+  )}
+
   <div className="space-y-6">
 
     {enrollments.map((item) => (
@@ -484,6 +508,28 @@ useEffect(() => {
           </div>
 
         </div>
+
+        {item.status === "completed" && (
+          <div className="mt-8 flex flex-col gap-3 border-t border-green-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-bold text-green-700">Certificate ready</p>
+              <p className="mt-1 text-sm text-gray-500">
+                Your personalized NSFI completion certificate is available.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleCertificateDownload(item)}
+              disabled={downloadingCertificateId === item.id}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-green-600 px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-green-700 disabled:cursor-wait disabled:opacity-70"
+            >
+              <FiDownload />
+              {downloadingCertificateId === item.id
+                ? "Preparing..."
+                : "Download Certificate"}
+            </button>
+          </div>
+        )}
 
       </div>
 

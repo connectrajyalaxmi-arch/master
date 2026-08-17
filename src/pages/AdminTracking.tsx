@@ -197,6 +197,15 @@ const loadDashboard = async () => {
         message = JSON.parse(text).error;
       } catch {}
 
+      if (response.status === 401 || response.status === 403) {
+        setAuthenticated(false);
+        setAdminToken("");
+        window.sessionStorage.removeItem("nsfi_admin_email");
+        window.sessionStorage.removeItem("nsfi_admin_token");
+        window.localStorage.removeItem("nsfi_admin_authorized");
+        window.dispatchEvent(new Event("admin-auth-changed"));
+      }
+
       throw new Error(message);
     }
 
@@ -264,7 +273,7 @@ const handleLogin = async (
     setAdminPassword("");
     window.sessionStorage.setItem("nsfi_admin_email", adminEmail.trim());
     window.sessionStorage.setItem("nsfi_admin_token", data.token);
-    window.localStorage.setItem("nsfi_admin_authorized", "true");
+    window.localStorage.removeItem("nsfi_admin_authorized");
     window.dispatchEvent(new Event("admin-auth-changed"));
 
     setStatusMessage("");
