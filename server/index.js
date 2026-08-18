@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import fs from "fs";
 import crypto from "crypto";
+import path from "path";
+import { fileURLToPath } from "url";
 
 try {
   process.loadEnvFile(".env");
@@ -14,6 +16,7 @@ const PORT = process.env.PORT ?? 4000;
 const dataPath = new URL("./enrollments.json", import.meta.url);
 const inquiriesPath = new URL("./inquiries.json", import.meta.url);
 const notificationsPath = new URL("./notifications.json", import.meta.url);
+const distPath = fileURLToPath(new URL("../dist", import.meta.url));
 const ADMIN_EMAIL = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
 const ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || "");
 const adminSessions = new Set();
@@ -71,8 +74,15 @@ const readEnrollments = () => {
   }
 };
 
+const saveJsonFile = (fileUrl, entries) => {
+  const filePath = fileURLToPath(fileUrl);
+  const temporaryPath = `${filePath}.tmp`;
+  fs.writeFileSync(temporaryPath, JSON.stringify(entries, null, 2), "utf-8");
+  fs.renameSync(temporaryPath, filePath);
+};
+
 const saveEnrollments = (entries) => {
-  fs.writeFileSync(dataPath, JSON.stringify(entries, null, 2), "utf-8");
+  saveJsonFile(dataPath, entries);
 };
 
 const readInquiries = () => {
@@ -85,7 +95,7 @@ const readInquiries = () => {
 };
 
 const saveInquiries = (entries) => {
-  fs.writeFileSync(inquiriesPath, JSON.stringify(entries, null, 2), "utf-8");
+  saveJsonFile(inquiriesPath, entries);
 };
 
 const readNotifications = () => {
@@ -98,7 +108,7 @@ const readNotifications = () => {
 };
 
 const saveNotifications = (entries) => {
-  fs.writeFileSync(notificationsPath, JSON.stringify(entries, null, 2), "utf-8");
+  saveJsonFile(notificationsPath, entries);
 };
 
 const addNotification = (type, title, message) => {
@@ -290,6 +300,13 @@ app.get("/api/track", (req, res) => {
   return res.json({ enrollments, inquiries, isAdmin: false });
 });
 
+
+app.use(express.static(distPath));
+
+app.get("*", (req, res, next) => {
+  if (req.path.startsWith("/api/")) return next();
+  return res.sendFile(path.join(distPath, "index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`API server running at http://localhost:${PORT}`);
