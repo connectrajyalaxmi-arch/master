@@ -169,9 +169,12 @@ const handleSubmit = async (
               Call Us
             </h3>
 
-            <p className="mt-4 text-gray-600">
-              +91 98765 43210
-            </p>
+            <a
+              href="tel:+918429780484"
+              className="mt-4 inline-block text-gray-600 transition hover:text-orange-500"
+            >
+              +91 8429-780484
+            </a>
 
             <p className="mt-2 text-sm text-gray-500">
               Monday - Saturday

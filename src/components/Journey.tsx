@@ -7,7 +7,6 @@ import {
   FiBookOpen,
   FiHome,
   FiBriefcase,
-  FiTrendingUp,
 } from "react-icons/fi";
 
 const Journey = () => {

@@ -14,7 +14,10 @@ import {
   FiActivity,
   FiDownload,
 } from "react-icons/fi";
-import { downloadCertificate } from "../utils/certificate";
+import {
+  downloadCertificate,
+  getCertificateReference,
+} from "../utils/certificate";
 
 interface Enrollment {
   id: number;
@@ -60,7 +63,7 @@ const Profile = () => {
     setLoading(true);
 
     const response = await fetch(
-      `http://localhost:4000/api/track?email=${encodeURIComponent(email)}`
+      `/api/track?email=${encodeURIComponent(email)}`
     );
 
     const data = await response.json();
@@ -124,7 +127,12 @@ useEffect(() => {
     setDownloadingCertificateId(enrollment.id);
 
     try {
-      await downloadCertificate(enrollment.name || userName, enrollment.program);
+      await downloadCertificate(
+        enrollment.name || userName,
+        enrollment.program,
+        enrollment.id,
+        enrollment.createdAt,
+      );
     } catch (error) {
       console.error("Certificate generation failed:", error);
       setCertificateMessage("Unable to download the certificate. Please try again.");
@@ -515,6 +523,9 @@ useEffect(() => {
               <p className="font-bold text-green-700">Certificate ready</p>
               <p className="mt-1 text-sm text-gray-500">
                 Your personalized NSFI completion certificate is available.
+              </p>
+              <p className="mt-2 text-xs font-bold uppercase tracking-wider text-[#241A8B]">
+                Reference: {getCertificateReference(item.id, item.createdAt)}
               </p>
             </div>
             <button

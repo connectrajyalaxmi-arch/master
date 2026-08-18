@@ -713,7 +713,14 @@ return (
                 <p className="mt-4 text-gray-500">No recent notifications.</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div
+                aria-label="Recent notifications"
+                className={`space-y-4 ${
+                  notifications.length > 5
+                    ? "max-h-[34rem] overflow-y-auto overscroll-contain pr-2"
+                    : ""
+                }`}
+              >
                 {notifications.map((item) => (
                   <div
                     key={item.id}

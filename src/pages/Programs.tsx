@@ -67,7 +67,7 @@ const [enrollForm, setEnrollForm] = useState({
       duration: "6 Weeks",
       mode: "Offline",
       level: "Beginner",
-      price: "₹4,999",
+      price: "Contact Us",
       icon: <FiBookOpen size={34} />,
       description:
         "Improve spoken English, vocabulary, grammar and public speaking confidence.",
@@ -89,7 +89,7 @@ const [enrollForm, setEnrollForm] = useState({
       duration: "8 Weeks",
       mode: "Hybrid",
       level: "Beginner",
-      price: "₹8,999",
+      price: "Contact Us",
       icon: <FiCpu size={34} />,
       description:
         "Learn ChatGPT, Generative AI, Prompt Engineering and AI productivity tools.",
@@ -110,7 +110,7 @@ const [enrollForm, setEnrollForm] = useState({
       duration: "4 Weeks",
       mode: "Offline",
       level: "Beginner",
-      price: "₹3,999",
+      price: "Contact Us",
       icon: <FiUsers size={34} />,
       description:
         "Resume writing, interview preparation and personality development.",
@@ -535,7 +535,7 @@ const submitEnrollment = async (e: React.FormEvent) => {
   }
 
   try {
-    const response = await fetch("http://localhost:4000/api/enroll", {
+    const response = await fetch("/api/enroll", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -775,15 +775,17 @@ const submitEnrollment = async (e: React.FormEvent) => {
 
                       <p className="text-sm text-gray-500">
 
-                        Program Fee
+                        Fee Information
 
                       </p>
 
-                      <h3 className="mt-2 text-3xl font-black text-[#241A8B]">
-
-                        {program.price}
-
-                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/contact")}
+                        className="mt-2 inline-flex items-center gap-2 text-2xl font-black text-[#241A8B] transition hover:text-orange-500"
+                      >
+                        Contact Us <FiArrowRight />
+                      </button>
 
                     </div>
 
@@ -828,9 +830,9 @@ const submitEnrollment = async (e: React.FormEvent) => {
             {/* ================= LEARN MORE MODAL ================= */}
 
 {showDetailsModal && selectedProgram && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6">
+  <div className="fixed inset-0 z-50 flex items-stretch justify-center overflow-hidden bg-black/60 sm:items-center sm:p-6">
 
-    <div className="w-full max-w-4xl rounded-[32px] bg-white p-10 shadow-2xl">
+    <div className="h-[100dvh] w-full max-w-3xl overflow-y-auto overscroll-contain bg-white p-5 shadow-2xl sm:h-auto sm:max-h-[calc(100dvh-3rem)] sm:rounded-[28px] sm:p-8">
 
       {/* Header */}
 
@@ -884,8 +886,15 @@ const submitEnrollment = async (e: React.FormEvent) => {
             <strong>Level:</strong> {selectedProgram.level}
           </p>
 
-          <p className="mt-3">
-            <strong>Fee:</strong> {selectedProgram.price}
+          <p className="mt-3 flex items-center gap-2">
+            <strong>Fee:</strong>
+            <button
+              type="button"
+              onClick={() => navigate("/contact")}
+              className="font-bold text-[#241A8B] underline decoration-orange-400 underline-offset-4 hover:text-orange-500"
+            >
+              Contact Us
+            </button>
           </p>
 
         </div>
@@ -953,9 +962,9 @@ const submitEnrollment = async (e: React.FormEvent) => {
 )}
 
       {showEnrollModal && selectedProgram && (
-<div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-6">
+<div className="fixed inset-0 z-[60] flex items-stretch justify-center overflow-hidden bg-black/60 sm:items-center sm:p-6">
 
-<div className="w-full max-w-3xl rounded-[32px] bg-white p-10 shadow-2xl">
+<div className="h-[100dvh] w-full max-w-2xl overflow-y-auto overscroll-contain bg-white p-5 shadow-2xl sm:h-auto sm:max-h-[calc(100dvh-3rem)] sm:rounded-[28px] sm:p-8">
 
 <div className="mb-8 flex items-center justify-between">
 

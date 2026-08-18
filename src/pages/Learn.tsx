@@ -12,10 +12,6 @@ import {
   FiSearch,
   FiClock,
   FiExternalLink,
-  FiCode,
-  FiDatabase,
-  FiTool,
-  FiMonitor,
   FiCheckCircle,
 } from "react-icons/fi";
 
@@ -130,6 +126,215 @@ const resources = [
     duration: "2 Hours",
     color: "from-gray-700 to-black",
   },
+  {
+    title: "Mechanical Engineering",
+    icon: "⚙️",
+    description:
+      "Build core knowledge in mechanics, materials, machine components, manufacturing and engineering design.",
+    url: "https://www.nptel.ac.in/courses/112104526",
+    category: "Engineering",
+    difficulty: "Beginner",
+    duration: "12 Weeks",
+    color: "from-slate-600 to-zinc-400",
+  },
+  {
+    title: "Electronics & Communication",
+    icon: "📡",
+    description:
+      "Study basic electronics, semiconductor devices, circuits and communication engineering concepts.",
+    url: "https://archive.nptel.ac.in/courses/117/107/117107095/",
+    category: "Engineering",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-cyan-600 to-blue-500",
+  },
+  {
+    title: "Electrical Engineering",
+    icon: "⚡",
+    description:
+      "Learn AC and DC circuits, electrical machines, measurements and fundamental electrical systems.",
+    url: "https://www.nptel.ac.in/courses/108102185",
+    category: "Engineering",
+    difficulty: "Beginner",
+    duration: "12 Weeks",
+    color: "from-yellow-500 to-amber-600",
+  },
+  {
+    title: "Civil Engineering",
+    icon: "🏗️",
+    description:
+      "Explore soil mechanics, construction materials, structures and essential civil engineering principles.",
+    url: "https://www.nptel.ac.in/courses/105105168",
+    category: "Engineering",
+    difficulty: "Intermediate",
+    duration: "12 Weeks",
+    color: "from-stone-600 to-orange-500",
+  },
+  {
+    title: "Business Analysis",
+    icon: "📊",
+    description:
+      "Understand business analysis practices, requirements, stakeholder needs and better business outcomes.",
+    url: "https://www.iiba.org/career-resources/business-analysis-resources/",
+    category: "Business",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-violet-600 to-indigo-500",
+  },
+  {
+    title: "Microsoft Excel",
+    icon: "📈",
+    description:
+      "Practice formulas, functions, PivotTables, data organization and workplace reporting skills.",
+    url: "https://support.microsoft.com/en-us/excel/",
+    category: "Business",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-green-700 to-emerald-500",
+  },
+  {
+    title: "Power BI",
+    icon: "📉",
+    description:
+      "Turn business data into interactive reports and dashboards with Microsoft Power BI.",
+    url: "https://learn.microsoft.com/en-us/training/modules/get-started-with-power-bi/",
+    category: "Business",
+    difficulty: "Beginner",
+    duration: "1 Hour",
+    color: "from-yellow-500 to-orange-400",
+  },
+  {
+    title: "Professional Communication",
+    icon: "💬",
+    description:
+      "Improve workplace writing, presentations, meetings, interviews and professional conversations.",
+    url: "https://learnenglish.britishcouncil.org/business-english",
+    category: "Professional Skills",
+    difficulty: "All Levels",
+    duration: "Self-paced",
+    color: "from-blue-600 to-sky-400",
+  },
+  {
+    title: "Microsoft PowerPoint",
+    icon: "🗣️",
+    description:
+      "Create clear presentations, structure your ideas and present confidently using practical PowerPoint guidance.",
+    url: "https://support.microsoft.com/en-us/powerpoint",
+    category: "Professional Skills",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-orange-600 to-amber-400",
+  },
+  {
+    title: "Microsoft Word",
+    icon: "📝",
+    description:
+      "Create and format professional documents, resumes, reports, tables and collaborative files in Microsoft Word.",
+    url: "https://support.microsoft.com/en-us/word",
+    category: "Professional Skills",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-blue-700 to-sky-500",
+  },
+  {
+    title: "Resume Writing",
+    icon: "📄",
+    description:
+      "Learn how to organize your experience, write effective bullet points and prepare a professional resume.",
+    url: "https://edu.gcfglobal.org/en/resumewriting/",
+    category: "Professional Skills",
+    difficulty: "Beginner",
+    duration: "2 Hours",
+    color: "from-indigo-600 to-blue-500",
+  },
+  {
+    title: "Interview Skills",
+    icon: "🤝",
+    description:
+      "Prepare strong answers, communicate your value and build confidence for job interviews.",
+    url: "https://edu.gcfglobal.org/en/interviewingskills/",
+    category: "Professional Skills",
+    difficulty: "Beginner",
+    duration: "2 Hours",
+    color: "from-emerald-600 to-teal-400",
+  },
+  {
+    title: "Workplace Productivity",
+    icon: "🎯",
+    description:
+      "Strengthen time management, planning, collaboration and everyday workplace effectiveness.",
+    url: "https://edu.gcfglobal.org/en/topics/work/",
+    category: "Professional Skills",
+    difficulty: "All Levels",
+    duration: "Self-paced",
+    color: "from-violet-600 to-purple-400",
+  },
+  {
+    title: "Canva Design",
+    icon: "🖌️",
+    description:
+      "Learn visual communication, presentations, social media graphics and practical design workflows.",
+    url: "https://www.canva.com/design-school/",
+    category: "Creative Tools",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-cyan-500 to-fuchsia-500",
+  },
+  {
+    title: "Video Editing",
+    icon: "🎬",
+    description:
+      "Develop editing, color correction, audio and visual-effects skills with DaVinci Resolve training.",
+    url: "https://www.blackmagicdesign.com/products/davinciresolve/training",
+    category: "Creative Tools",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-rose-600 to-violet-600",
+  },
+  {
+    title: "Adobe Express",
+    icon: "✨",
+    description:
+      "Create social graphics, short videos, documents and branded content with Adobe's design tools.",
+    url: "https://helpx.adobe.com/express/tutorials.html",
+    category: "Creative Tools",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-red-600 to-pink-500",
+  },
+  {
+    title: "Figma",
+    icon: "🧩",
+    description:
+      "Learn interface design, reusable components, prototyping and collaborative design workflows.",
+    url: "https://help.figma.com/hc/en-us/categories/360002051613-Get-started",
+    category: "Creative Tools",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-purple-600 to-cyan-500",
+  },
+  {
+    title: "Blender 3D",
+    icon: "🧊",
+    description:
+      "Get started with 3D modeling, materials, lighting, animation and rendering in Blender.",
+    url: "https://docs.blender.org/manual/en/latest/getting_started/index.html",
+    category: "Creative Tools",
+    difficulty: "Intermediate",
+    duration: "Self-paced",
+    color: "from-orange-500 to-blue-600",
+  },
+  {
+    title: "Audacity Audio Editing",
+    icon: "🎙️",
+    description:
+      "Record, clean, edit and export audio for podcasts, presentations and creative media projects.",
+    url: "https://manual.audacityteam.org/",
+    category: "Creative Tools",
+    difficulty: "Beginner",
+    duration: "Self-paced",
+    color: "from-blue-700 to-fuchsia-500",
+  },
 ];
 
 const categories = [
@@ -138,6 +343,10 @@ const categories = [
   "Backend",
   "Database",
   "Tools",
+  "Engineering",
+  "Business",
+  "Professional Skills",
+  "Creative Tools",
 ];
 
 const Learn = () => {
@@ -238,8 +447,8 @@ const Learn = () => {
             <div className="mx-auto max-w-5xl rounded-[36px] border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-orange-50 p-6 shadow-[0_20px_60px_rgba(36,26,139,.12)] md:p-10">
               <div className="text-center">
                 <span className="text-sm font-black uppercase tracking-[0.2em] text-orange-500">Resource Finder</span>
-                <h2 className="mt-3 text-3xl font-black text-[#241A8B] md:text-4xl">Search Technologies</h2>
-                <p className="mt-3 text-slate-600">Find a resource that matches the skill you want to build next.</p>
+                <h2 className="mt-3 text-3xl font-black text-[#241A8B] md:text-4xl">Search Learning Resources</h2>
+                <p className="mt-3 text-slate-600">Explore technology, engineering, business and professional skills.</p>
               </div>
 
             <div className="mx-auto mt-8 max-w-4xl">
@@ -251,7 +460,7 @@ const Learn = () => {
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search technologies..."
+                  placeholder="Search courses, skills or tools..."
                   className="w-full rounded-3xl border border-gray-200 bg-white py-5 pl-16 pr-6 text-lg shadow-xl outline-none transition-all duration-300 focus:border-[#241A8B] focus:ring-4 focus:ring-indigo-100"
                 />
 
@@ -295,7 +504,7 @@ const Learn = () => {
 
                 </span>
 
-                technologies
+                resources
 
               </p>
 
@@ -392,7 +601,7 @@ const Learn = () => {
 
                         <FiCheckCircle />
 
-                        Official Documentation
+                        Trusted Learning Resource
 
                       </div>
 
@@ -405,7 +614,7 @@ const Learn = () => {
                         className="mt-8 flex items-center justify-center gap-3 rounded-2xl bg-[#241A8B] px-6 py-4 font-bold text-white transition-all duration-300 hover:bg-orange-500"
                       >
 
-                        Visit Documentation
+                        Open Resource
 
                         <FiExternalLink />
 
@@ -431,7 +640,7 @@ const Learn = () => {
 
                 <h3 className="mt-6 text-3xl font-bold text-[#241A8B]">
 
-                  No technologies found
+                  No resources found
 
                 </h3>
 
@@ -473,13 +682,13 @@ const Learn = () => {
 
               <span className="inline-flex rounded-full border border-indigo-200 bg-indigo-50 px-5 py-2 text-sm font-bold uppercase tracking-widest text-[#241A8B]">
 
-                WHY OFFICIAL DOCS
+                WHY TRUSTED RESOURCES
 
               </span>
 
               <h2 className="mt-6 text-4xl font-black text-[#241A8B] md:text-5xl">
 
-                Learn From The Source
+                Learn From Trusted Sources
 
               </h2>
 
@@ -487,9 +696,9 @@ const Learn = () => {
 
               <p className="mx-auto mt-8 max-w-3xl text-lg leading-8 text-gray-600">
 
-                Official documentation is written and maintained by the teams
-                who build these technologies. It provides the latest features,
-                best practices, and accurate implementation guidance.
+                Learn through official documentation, recognized professional
+                bodies, and established education platforms. These resources
+                provide dependable concepts, practical guidance and relevant skills.
 
               </p>
 
@@ -502,37 +711,37 @@ const Learn = () => {
               {[
                 {
                   icon: "🚀",
-                  title: "Always Updated",
+                  title: "Relevant Learning",
                   description:
-                    "Access the newest features, improvements, and documentation directly from the technology creators.",
+                    "Build useful knowledge through resources designed for current academic and workplace needs.",
                   color: "from-orange-500 to-red-500",
                 },
                 {
                   icon: "✔️",
                   title: "Trusted Source",
                   description:
-                    "Learn using official guides instead of outdated tutorials or unofficial references.",
+                    "Learn using official guides, established institutions and recognized professional resources.",
                   color: "from-indigo-600 to-blue-500",
                 },
                 {
                   icon: "💼",
                   title: "Industry Standard",
                   description:
-                    "Professional developers rely on official documentation every day while building software.",
+                    "Develop skills used across engineering, technology, business and creative industries.",
                   color: "from-green-500 to-emerald-500",
                 },
                 {
                   icon: "📚",
                   title: "Real Examples",
                   description:
-                    "Discover practical examples, sample code, and implementation patterns used in real projects.",
+                    "Discover practical examples, guided lessons and techniques that support real projects.",
                   color: "from-cyan-500 to-sky-500",
                 },
                 {
                   icon: "⚡",
                   title: "Better Learning",
                   description:
-                    "Develop deeper understanding by learning concepts directly from their original documentation.",
+                    "Develop deeper understanding with structured materials for beginners and advancing learners.",
                   color: "from-yellow-400 to-orange-400",
                 },
                 {

@@ -154,11 +154,11 @@ const Footer = () => {
                 <span className="break-all">partnerships@nsfi.org.in</span>
               </a>
               <a
-                href="tel:+919876543210"
+                href="tel:+918429780484"
                 className="group flex items-start gap-3 transition hover:text-orange-300"
               >
                 <FiPhone className="mt-1 shrink-0 text-orange-400" />
-                <span>+91 98765 43210</span>
+                <span>+91 8429-780484</span>
               </a>
               <div className="flex items-start gap-3">
                 <FiMapPin className="mt-1 shrink-0 text-orange-400" />
