@@ -1,28 +1,27 @@
 import express from "express";
 import cors from "cors";
-import fs from "fs";
 import crypto from "crypto";
 import path from "path";
 import { fileURLToPath } from "url";
-
-try {
-  process.loadEnvFile(".env");
-} catch {
-  // The project can still run without a local .env file; admin access stays disabled.
-}
+import database, {
+  appEnvironment,
+  verifyDatabaseConnection,
+} from "./database.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 4000;
-const dataPath = new URL("./enrollments.json", import.meta.url);
-const inquiriesPath = new URL("./inquiries.json", import.meta.url);
-const notificationsPath = new URL("./notifications.json", import.meta.url);
 const distPath = fileURLToPath(new URL("../dist", import.meta.url));
 const ADMIN_EMAIL = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
 const ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || "");
 const adminSessions = new Set();
+const validStatuses = ["received", "under-review", "processing", "completed"];
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
+
+const asyncRoute = (handler) => (req, res, next) => {
+  Promise.resolve(handler(req, res, next)).catch(next);
+};
 
 const credentialsMatch = (email, password) => {
   if (!ADMIN_EMAIL || !ADMIN_PASSWORD) return false;
@@ -32,14 +31,20 @@ const credentialsMatch = (email, password) => {
   const suppliedPassword = Buffer.from(String(password || ""));
   const configuredPassword = Buffer.from(ADMIN_PASSWORD);
 
-  const emailMatches = suppliedEmail.length === configuredEmail.length && crypto.timingSafeEqual(suppliedEmail, configuredEmail);
-  const passwordMatches = suppliedPassword.length === configuredPassword.length && crypto.timingSafeEqual(suppliedPassword, configuredPassword);
+  const emailMatches =
+    suppliedEmail.length === configuredEmail.length &&
+    crypto.timingSafeEqual(suppliedEmail, configuredEmail);
+  const passwordMatches =
+    suppliedPassword.length === configuredPassword.length &&
+    crypto.timingSafeEqual(suppliedPassword, configuredPassword);
 
   return emailMatches && passwordMatches;
 };
 
 const requireAdmin = (req, res) => {
-  const token = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "").trim();
+  const token = String(req.headers.authorization || "")
+    .replace(/^Bearer\s+/i, "")
+    .trim();
 
   if (!token || !adminSessions.has(token)) {
     res.status(403).json({ error: "Administrator access is required." });
@@ -49,11 +54,66 @@ const requireAdmin = (req, res) => {
   return true;
 };
 
+const normalizeDate = (value) => {
+  if (value instanceof Date) return value.toISOString();
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? String(value) : parsed.toISOString();
+};
+
+const mapEnrollment = (row) => ({
+  id: Number(row.id),
+  name: row.name,
+  email: row.email,
+  phone: row.phone || "",
+  message: row.message || "",
+  program: row.program,
+  status: row.status || "received",
+  createdAt: normalizeDate(row.createdAt),
+});
+
+const mapInquiry = (row) => ({
+  id: Number(row.id),
+  companyName: row.companyName || "",
+  contactName: row.contactName,
+  email: row.email,
+  phone: row.phone || "",
+  industry: row.industry || "",
+  message: row.message || "",
+  category: row.category || "Partnership",
+  status: row.status || "received",
+  createdAt: normalizeDate(row.createdAt),
+});
+
+const mapNotification = (row) => ({
+  id: Number(row.id),
+  type: row.type,
+  title: row.title,
+  message: row.message,
+  createdAt: normalizeDate(row.createdAt),
+  read: Boolean(row.read),
+});
+
+const enrollmentSelect = `
+  SELECT id, name, email, phone, message, program, status,
+         created_at AS createdAt
+  FROM enrollments
+`;
+
+const inquirySelect = `
+  SELECT id, company_name AS companyName, contact_name AS contactName,
+         email, phone, industry, message, category, status,
+         created_at AS createdAt
+  FROM inquiries
+`;
+
 app.post("/api/admin/login", (req, res) => {
   const { email, password } = req.body;
 
   if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
-    return res.status(503).json({ error: "Admin login is not configured. Add ADMIN_EMAIL and ADMIN_PASSWORD to .env." });
+    return res.status(503).json({
+      error:
+        "Admin login is not configured. Add ADMIN_EMAIL and ADMIN_PASSWORD to the server environment.",
+    });
   }
 
   if (!credentialsMatch(email, password)) {
@@ -65,249 +125,305 @@ app.post("/api/admin/login", (req, res) => {
   return res.json({ success: true, token });
 });
 
-const readEnrollments = () => {
-  try {
-    const raw = fs.readFileSync(dataPath, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-};
+app.post(
+  "/api/enroll",
+  asyncRoute(async (req, res) => {
+    const name = String(req.body.name || "").trim();
+    const email = String(req.body.email || "").trim().toLowerCase();
+    const phone = String(req.body.phone || "").trim();
+    const message = String(req.body.message || "").trim();
+    const program = String(req.body.program || "").trim();
 
-const saveJsonFile = (fileUrl, entries) => {
-  const filePath = fileURLToPath(fileUrl);
-  const temporaryPath = `${filePath}.tmp`;
-  fs.writeFileSync(temporaryPath, JSON.stringify(entries, null, 2), "utf-8");
-  fs.renameSync(temporaryPath, filePath);
-};
+    if (!name || !email || !program) {
+      return res
+        .status(400)
+        .json({ error: "Name, email, and program are required." });
+    }
 
-const saveEnrollments = (entries) => {
-  saveJsonFile(dataPath, entries);
-};
+    const id = Date.now();
+    const notificationId = id + 1;
+    const createdAt = new Date();
+    const connection = await database.getConnection();
 
-const readInquiries = () => {
-  try {
-    const raw = fs.readFileSync(inquiriesPath, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-};
+    try {
+      await connection.beginTransaction();
+      await connection.execute(
+        `INSERT INTO enrollments
+          (id, name, email, phone, message, program, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, 'received', ?)`,
+        [id, name, email, phone, message, program, createdAt],
+      );
+      await connection.execute(
+        `INSERT INTO notifications
+          (id, type, title, message, created_at, is_read)
+         VALUES (?, 'enrollment', 'New enrollment received', ?, ?, FALSE)`,
+        [notificationId, `${name} requested enrollment for ${program}.`, createdAt],
+      );
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
 
-const saveInquiries = (entries) => {
-  saveJsonFile(inquiriesPath, entries);
-};
+    const enrollment = {
+      id,
+      name,
+      email,
+      phone,
+      message,
+      program,
+      status: "received",
+      createdAt: createdAt.toISOString(),
+    };
 
-const readNotifications = () => {
-  try {
-    const raw = fs.readFileSync(notificationsPath, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-};
+    return res.status(201).json({ success: true, enrollment });
+  }),
+);
 
-const saveNotifications = (entries) => {
-  saveJsonFile(notificationsPath, entries);
-};
+app.post(
+  "/api/inquiry",
+  asyncRoute(async (req, res) => {
+    const companyName = String(req.body.companyName || "").trim();
+    const contactName = String(req.body.contactName || "").trim();
+    const email = String(req.body.email || "").trim().toLowerCase();
+    const phone = String(req.body.phone || "").trim();
+    const industry = String(req.body.industry || "").trim();
+    const message = String(req.body.message || "").trim();
+    const category = String(req.body.category || "Partnership").trim();
 
-const addNotification = (type, title, message) => {
-  const notifications = readNotifications();
-  notifications.unshift({
-    id: Date.now(),
-    type,
-    title,
-    message,
-    createdAt: new Date().toISOString(),
-    read: false,
-  });
-  saveNotifications(notifications.slice(0, 50));
-  return notifications[0];
-};
+    if (!contactName || !email) {
+      return res
+        .status(400)
+        .json({ error: "Contact name and email are required." });
+    }
 
-app.post("/api/enroll", (req, res) => {
-  const { name, email, phone, message, program } = req.body;
+    const id = Date.now();
+    const notificationId = id + 1;
+    const createdAt = new Date();
+    const connection = await database.getConnection();
 
-  if (!name || !email || !program) {
-    return res.status(400).json({ error: "Name, email, and program are required." });
-  }
+    try {
+      await connection.beginTransaction();
+      await connection.execute(
+        `INSERT INTO inquiries
+          (id, company_name, contact_name, email, phone, industry, message,
+           category, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'received', ?)`,
+        [
+          id,
+          companyName,
+          contactName,
+          email,
+          phone,
+          industry,
+          message,
+          category,
+          createdAt,
+        ],
+      );
+      await connection.execute(
+        `INSERT INTO notifications
+          (id, type, title, message, created_at, is_read)
+         VALUES (?, 'inquiry', 'New inquiry received', ?, ?, FALSE)`,
+        [
+          notificationId,
+          `${contactName} submitted a new inquiry for ${category}.`,
+          createdAt,
+        ],
+      );
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
 
-  const enrollments = readEnrollments();
-  const id = Date.now();
-  const enrollment = {
-    id,
-    name,
-    email,
-    phone: phone || "",
-    message: message || "",
-    program,
-    status: "received",
-    createdAt: new Date().toISOString(),
-  };
+    const inquiry = {
+      id,
+      companyName,
+      contactName,
+      email,
+      phone,
+      industry,
+      message,
+      category,
+      status: "received",
+      createdAt: createdAt.toISOString(),
+    };
 
-  enrollments.push(enrollment);
-  saveEnrollments(enrollments);
-  addNotification("enrollment", "New enrollment received", `${name} requested enrollment for ${program}.`);
+    return res.status(201).json({ success: true, inquiry });
+  }),
+);
 
-  return res.status(201).json({ success: true, enrollment });
-});
-
-app.post("/api/inquiry", (req, res) => {
-  const { companyName, contactName, email, phone, industry, message, category } = req.body;
-
-  if (!contactName || !email) {
-    return res.status(400).json({ error: "Contact name and email are required." });
-  }
-
-  const inquiries = readInquiries();
-  const id = Date.now();
-  const inquiry = {
-    id,
-    companyName: companyName || "",
-    contactName,
-    email,
-    phone: phone || "",
-    industry: industry || "",
-    message: message || "",
-    category: category || "Partnership",
-    status: "received",
-    createdAt: new Date().toISOString(),
-  };
-
-  inquiries.push(inquiry);
-  saveInquiries(inquiries);
-  addNotification("inquiry", "New inquiry received", `${contactName} submitted a new inquiry for ${category || "partnership"}.`);
-
-  return res.status(201).json({ success: true, inquiry });
-});
-
-app.get("/api/enrollments", (req, res) => {
-  return res.json(readEnrollments());
-});
-
-app.put("/api/enrollment/:id/status", (req, res) => {
-  const { status } = req.body;
-  const id = parseInt(req.params.id);
-
-  if (!requireAdmin(req, res)) return;
-
-  if (!["received", "under-review", "processing", "completed"].includes(status)) {
-    return res.status(400).json({ error: "Invalid status." });
-  }
-
-  const enrollments = readEnrollments();
-  const enrollment = enrollments.find((e) => e.id === id);
-
-  if (!enrollment) {
-    return res.status(404).json({ error: "Enrollment not found." });
-  }
-
-  enrollment.status = status;
-  saveEnrollments(enrollments);
-
-  return res.json({ success: true, enrollment });
-});
-
-app.put("/api/inquiry/:id/status", (req, res) => {
-  const { status } = req.body;
-  const id = parseInt(req.params.id);
-
-  if (!requireAdmin(req, res)) return;
-
-  if (!["received", "under-review", "processing", "completed"].includes(status)) {
-    return res.status(400).json({ error: "Invalid status." });
-  }
-
-  const inquiries = readInquiries();
-  const inquiry = inquiries.find((i) => i.id === id);
-
-  if (!inquiry) {
-    return res.status(404).json({ error: "Inquiry not found." });
-  }
-
-  inquiry.status = status;
-  saveInquiries(inquiries);
-
-  return res.json({ success: true, inquiry });
-});
-
-app.delete("/api/admin/delete", (req, res) => {
-  if (!requireAdmin(req, res)) return;
-
-  const { type, id } = req.body;
-  const recordId = Number(id);
-
-  if (!Number.isInteger(recordId) || !["enrollment", "inquiry"].includes(type)) {
-    return res.status(400).json({ error: "Invalid record." });
-  }
-
-  const entries = type === "enrollment" ? readEnrollments() : readInquiries();
-  const nextEntries = entries.filter((entry) => entry.id !== recordId);
-
-  if (nextEntries.length === entries.length) {
-    return res.status(404).json({ error: "Record not found." });
-  }
-
-  if (type === "enrollment") saveEnrollments(nextEntries);
-  else saveInquiries(nextEntries);
-
-  return res.json({ success: true });
-});
-
-app.get("/api/notifications", (req, res) => {
-  if (!requireAdmin(req, res)) return;
-
-  return res.json({ notifications: readNotifications().slice(0, 10) });
-});
-
-app.get("/api/track", (req, res) => {
-  const isAdmin = req.query.admin === "true";
-  const email = String(req.query.email || "").trim().toLowerCase();
-
-  // Admin access
-  if (isAdmin) {
+app.get(
+  "/api/enrollments",
+  asyncRoute(async (req, res) => {
     if (!requireAdmin(req, res)) return;
-    const enrollments = readEnrollments().map((e) => ({
-      ...e,
-      status: e.status || "received"
-    }));
-    const inquiries = readInquiries().map((i) => ({
-      ...i,
-      status: i.status || "received"
-    }));
-    return res.json({ enrollments, inquiries, isAdmin: true });
-  }
+    const [rows] = await database.query(
+      `${enrollmentSelect} ORDER BY created_at DESC`,
+    );
+    return res.json(rows.map(mapEnrollment));
+  }),
+);
 
-  // User email lookup
-  if (!email) {
-    return res.status(400).json({ error: "Email is required to track." });
-  }
+app.put(
+  "/api/enrollment/:id/status",
+  asyncRoute(async (req, res) => {
+    if (!requireAdmin(req, res)) return;
+    const id = Number(req.params.id);
+    const { status } = req.body;
 
-  const enrollments = readEnrollments()
-    .filter((entry) => entry.email.toLowerCase() === email)
-    .map((e) => ({
-      ...e,
-      status: e.status || "received"
-    }));
-  
-  const inquiries = readInquiries()
-    .filter((entry) => entry.email.toLowerCase() === email)
-    .map((i) => ({
-      ...i,
-      status: i.status || "received"
-    }));
+    if (!Number.isSafeInteger(id)) {
+      return res.status(400).json({ error: "Invalid enrollment ID." });
+    }
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ error: "Invalid status." });
+    }
 
-  return res.json({ enrollments, inquiries, isAdmin: false });
+    const [result] = await database.execute(
+      "UPDATE enrollments SET status = ? WHERE id = ?",
+      [status, id],
+    );
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Enrollment not found." });
+    }
+
+    const [rows] = await database.execute(`${enrollmentSelect} WHERE id = ?`, [id]);
+    return res.json({ success: true, enrollment: mapEnrollment(rows[0]) });
+  }),
+);
+
+app.put(
+  "/api/inquiry/:id/status",
+  asyncRoute(async (req, res) => {
+    if (!requireAdmin(req, res)) return;
+    const id = Number(req.params.id);
+    const { status } = req.body;
+
+    if (!Number.isSafeInteger(id)) {
+      return res.status(400).json({ error: "Invalid inquiry ID." });
+    }
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ error: "Invalid status." });
+    }
+
+    const [result] = await database.execute(
+      "UPDATE inquiries SET status = ? WHERE id = ?",
+      [status, id],
+    );
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Inquiry not found." });
+    }
+
+    const [rows] = await database.execute(`${inquirySelect} WHERE id = ?`, [id]);
+    return res.json({ success: true, inquiry: mapInquiry(rows[0]) });
+  }),
+);
+
+app.delete(
+  "/api/admin/delete",
+  asyncRoute(async (req, res) => {
+    if (!requireAdmin(req, res)) return;
+    const { type } = req.body;
+    const id = Number(req.body.id);
+
+    if (!Number.isSafeInteger(id) || !["enrollment", "inquiry"].includes(type)) {
+      return res.status(400).json({ error: "Invalid record." });
+    }
+
+    const table = type === "enrollment" ? "enrollments" : "inquiries";
+    const [result] = await database.execute(`DELETE FROM ${table} WHERE id = ?`, [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Record not found." });
+    }
+    return res.json({ success: true });
+  }),
+);
+
+app.get(
+  "/api/notifications",
+  asyncRoute(async (req, res) => {
+    if (!requireAdmin(req, res)) return;
+    const [rows] = await database.query(
+      `SELECT id, type, title, message, created_at AS createdAt,
+              is_read AS \`read\`
+       FROM notifications
+       ORDER BY created_at DESC
+       LIMIT 50`,
+    );
+    return res.json({ notifications: rows.map(mapNotification) });
+  }),
+);
+
+app.get(
+  "/api/track",
+  asyncRoute(async (req, res) => {
+    const isAdmin = req.query.admin === "true";
+    const email = String(req.query.email || "").trim().toLowerCase();
+
+    if (isAdmin) {
+      if (!requireAdmin(req, res)) return;
+      const [[enrollmentRows], [inquiryRows]] = await Promise.all([
+        database.query(`${enrollmentSelect} ORDER BY created_at DESC`),
+        database.query(`${inquirySelect} ORDER BY created_at DESC`),
+      ]);
+      return res.json({
+        enrollments: enrollmentRows.map(mapEnrollment),
+        inquiries: inquiryRows.map(mapInquiry),
+        isAdmin: true,
+      });
+    }
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required to track." });
+    }
+
+    const [[enrollmentRows], [inquiryRows]] = await Promise.all([
+      database.execute(
+        `${enrollmentSelect} WHERE LOWER(email) = ? ORDER BY created_at DESC`,
+        [email],
+      ),
+      database.execute(
+        `${inquirySelect} WHERE LOWER(email) = ? ORDER BY created_at DESC`,
+        [email],
+      ),
+    ]);
+    return res.json({
+      enrollments: enrollmentRows.map(mapEnrollment),
+      inquiries: inquiryRows.map(mapInquiry),
+      isAdmin: false,
+    });
+  }),
+);
+
+app.use("/api", (req, res) => {
+  res.status(404).json({ error: "API route not found." });
 });
 
+app.use((error, req, res, next) => {
+  console.error("Request failed:", error);
+  if (res.headersSent) return next(error);
+  return res.status(500).json({ error: "An unexpected server error occurred." });
+});
 
 app.use(express.static(distPath));
 
-app.get("*", (req, res, next) => {
-  if (req.path.startsWith("/api/")) return next();
+app.get("*", (req, res) => {
   return res.sendFile(path.join(distPath, "index.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`API server running at http://localhost:${PORT}`);
-});
+try {
+  await verifyDatabaseConnection();
+  app.listen(PORT, () => {
+    console.log(
+      `Application server running in ${appEnvironment} mode at http://localhost:${PORT}`,
+    );
+  });
+} catch (error) {
+  console.error("Unable to connect to MySQL:", error.message);
+  process.exit(1);
+}
