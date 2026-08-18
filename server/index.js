@@ -416,14 +416,18 @@ app.get("*", (req, res) => {
   return res.sendFile(path.join(distPath, "index.html"));
 });
 
-try {
-  await verifyDatabaseConnection();
-  app.listen(PORT, () => {
-    console.log(
-      `Application server running in ${appEnvironment} mode at http://localhost:${PORT}`,
-    );
-  });
-} catch (error) {
-  console.error("Unable to connect to MySQL:", error.message);
-  process.exit(1);
-}
+const startServer = async () => {
+  try {
+    await verifyDatabaseConnection();
+    app.listen(PORT, () => {
+      console.log(
+        `Application server running in ${appEnvironment} mode at http://localhost:${PORT}`,
+      );
+    });
+  } catch (error) {
+    console.error("Unable to connect to MySQL:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
