@@ -44,14 +44,14 @@ const About = () => {
 
       <section className="relative isolate min-h-[780px] overflow-hidden bg-gradient-to-br from-[#fffdfa] via-white to-[#edf2ff] py-16 text-[#08255e] lg:min-h-[900px] lg:py-24">
         <div className="absolute left-0 top-0 h-full w-full bg-[radial-gradient(circle_at_15%_18%,rgba(255,255,255,.95),transparent_35%),radial-gradient(circle_at_35%_80%,rgba(218,225,255,.55),transparent_28%)]" />
-        <div className="absolute right-0 top-24 hidden h-[68%] w-[48%] overflow-hidden rounded-bl-[45%] border-l-[14px] border-b-[14px] border-white lg:block">
+        <div className="absolute right-0 top-24 hidden h-[68%] w-[48%] overflow-hidden rounded-bl-[45%] border-l-[14px] border-b-[14px] border-white xl:block">
           <img src={aboutImg} alt="Students learning together" className="h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#08255e]/25 via-transparent to-transparent" />
           <div className="absolute left-[26%] top-16 border-l-4 border-orange-400 pl-5 text-3xl font-black leading-tight tracking-wide text-white drop-shadow-lg">LEARN<br />GROW<br />SUCCEED</div>
         </div>
 
         <div className="relative mx-auto max-w-[1800px] px-6 lg:px-16">
-          <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-2xl pt-5 lg:pt-10">
+          <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-2xl pt-5 lg:pt-10 xl:max-w-[50%]">
             <div className="flex items-center gap-4 text-orange-500">
               <span className="h-1 w-24 rounded-full bg-orange-500" />
               <span className="rounded-2xl bg-orange-500 px-7 py-3 text-xl font-black tracking-[0.12em] text-white shadow-lg">ABOUT US</span>
@@ -60,7 +60,7 @@ const About = () => {
             <h1 className="mt-10 text-6xl font-black leading-none tracking-tight text-[#08255e] sm:text-7xl lg:text-8xl">About NSFI</h1>
             <div className="mt-8 h-2 w-36 rounded-full bg-orange-500" />
             <p className="mt-8 max-w-xl text-xl font-medium leading-9 text-slate-700 lg:text-2xl lg:leading-10">At National Skill Forge Institute, we empower people and organizations with industry-relevant skills, knowledge, and real-world confidence.</p>
-            <div className="mt-7 grid max-w-2xl gap-x-8 gap-y-3 text-sm font-bold text-[#08255e] sm:grid-cols-2 lg:grid-cols-3 lg:text-base">
+            <div className="mt-7 grid max-w-2xl gap-x-8 gap-y-3 text-sm font-bold text-[#08255e] sm:grid-cols-2 lg:text-base">
               {[
                 "Practical, applied learning",
                 "Industry-aligned programs",

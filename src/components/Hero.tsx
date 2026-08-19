@@ -67,12 +67,12 @@ const Hero = () => {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.7 }}
-        className="relative z-20 bg-orange-500 py-3 text-center font-semibold text-white"
+        className="relative z-20 bg-orange-500 px-4 py-2 text-center text-xs font-semibold leading-5 text-white sm:py-3 sm:text-sm sm:leading-6 md:text-base"
       >
         National Skill Forge Institute — Empowering Students with Industry-Ready Skills
       </motion.div>
 
-      <div className="relative z-20 mx-auto flex min-h-[calc(100vh-48px)] max-w-7xl items-center px-6">
+      <div className="relative z-20 mx-auto flex max-w-7xl items-center px-6 py-10 sm:min-h-[calc(100vh-48px)] sm:py-12 lg:py-16">
 
         <div className="grid w-full items-center gap-16 lg:grid-cols-2">
 
@@ -86,7 +86,7 @@ const Hero = () => {
 
             <motion.span
               whileHover={{ scale: 1.08 }}
-              className="inline-flex rounded-full bg-orange-500 px-5 py-2 text-sm font-semibold text-white shadow-lg"
+              className="inline-flex max-w-full rounded-full bg-orange-500 px-4 py-2 text-center text-xs font-semibold leading-5 text-white shadow-lg sm:px-5 sm:text-sm"
             >
               🚀 India's Future Begins Here
             </motion.span>
@@ -95,7 +95,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mt-8 text-5xl font-black leading-tight text-white md:text-7xl"
+              className="mt-6 text-4xl font-black leading-tight text-white sm:mt-8 sm:text-5xl md:text-7xl"
             >
               Build Skills.
               <br />

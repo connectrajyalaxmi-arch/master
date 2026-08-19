@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Programs from "./pages/Programs";
-// import Partnership from "./pages/Partnership";
 // import PartnerCategory from "./pages/PartnerCategory";
 // import TrackStatus from "./pages/TrackStatus";
 // import InquiryPage from "./pages/Inquiry";
@@ -17,6 +17,16 @@ import Organizations from "./pages/Organizations";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Faq from "./pages/Faq";
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
+
+  return null;
+};
 
 const ProtectedUserRoute = ({
   children,
@@ -36,6 +46,7 @@ const ProtectedUserRoute = ({
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <main className="app-shell">
       <Routes>
         <Route path="/" element={<Home />} />
@@ -47,7 +58,6 @@ function App() {
 
         <Route path="/programs" element={<Programs />} />
 
-        {/* <Route path="/partner" element={<Partnership />} /> */}
 <Route path="/contact" element={<Contact/>} />
         {/* <Route
           path="/partner/:category"

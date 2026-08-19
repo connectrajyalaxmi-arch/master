@@ -387,48 +387,6 @@ return (
         </button>
 
         <button
-          onClick={() => handleNavigate("/track")}
-          className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
-        >
-          📍 Track
-        </button>
-
-        <button
-          onClick={() => handleNavigate("/partner")}
-          className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
-        >
-          🤝 Partner With Us
-        </button>
-
-        <button
-          onClick={() => handleNavigate("/partner/companies")}
-          className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
-        >
-          🏢 Companies
-        </button>
-
-        <button
-          onClick={() => handleNavigate("/partner/colleges")}
-          className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
-        >
-          🏫 Colleges
-        </button>
-
-        <button
-          onClick={() => handleNavigate("/partner/schools")}
-          className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
-        >
-          🏫 Schools
-        </button>
-
-        <button
-          onClick={() => handleNavigate("/partner/institutes")}
-          className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
-        >
-          🎯 Institutes
-        </button>
-
-        <button
           onClick={() => handleNavigate("/#contact")}
           className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
         >
