@@ -475,12 +475,12 @@ return (
     <Navbar />
 
     {!authenticated ? (
-      <div className="min-h-screen bg-slate-100">
+      <div className="min-h-screen overflow-x-hidden bg-slate-100">
         {/* Hero */}
 
-        <section className="bg-gradient-to-r from-[#241A8B] via-indigo-700 to-[#1b1464] py-20">
+        <section className="bg-gradient-to-r from-[#241A8B] via-indigo-700 to-[#1b1464] py-12 sm:py-20">
           <div className="mx-auto max-w-7xl px-6">
-            <h1 className="text-5xl font-black text-white">Admin Dashboard</h1>
+            <h1 className="text-3xl font-black text-white sm:text-5xl">Admin Dashboard</h1>
 
             <p className="mt-4 max-w-2xl text-lg text-indigo-100">
               Secure administrator access for managing enrollments, inquiries,
@@ -493,7 +493,7 @@ return (
 
         <section className="-mt-12 pb-20">
           <div className="mx-auto max-w-md px-6">
-            <div className="rounded-3xl bg-white p-10 shadow-2xl">
+            <div className="rounded-3xl bg-white p-6 shadow-2xl sm:p-10">
               <div className="text-center">
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#241A8B] text-4xl text-white">
                   🔐
@@ -550,13 +550,13 @@ return (
         </section>
       </div>
     ) : (
-      <div className="min-h-screen bg-slate-100">
+      <div className="min-h-screen overflow-x-hidden bg-slate-100">
         {/* Header */}
 
         <section className="border-b bg-white">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
+          <div className="mx-auto flex max-w-7xl flex-col items-stretch gap-5 px-4 py-5 sm:px-6 md:flex-row md:items-center md:justify-between md:py-6">
             <div>
-              <h2 className="text-4xl font-black text-[#241A8B]">
+              <h2 className="text-3xl font-black text-[#241A8B] sm:text-4xl">
                 Admin Dashboard
               </h2>
 
@@ -565,10 +565,10 @@ return (
               </p>
             </div>
 
-            <div className="flex gap-3">
+            <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-3">
               <button
                 onClick={downloadExcel}
-                className="flex items-center gap-2 rounded-xl bg-green-600 px-5 py-3 font-semibold text-white hover:bg-green-700"
+                className="flex min-w-0 items-center justify-center gap-1 rounded-xl bg-green-600 px-2 py-3 text-sm font-semibold text-white hover:bg-green-700 sm:gap-2 sm:px-5 sm:text-base"
               >
                 <FiDownload />
                 Export
@@ -577,7 +577,7 @@ return (
               <button
                 onClick={handleRefresh}
                 disabled={loading}
-                className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"
+                className="flex min-w-0 items-center justify-center gap-1 rounded-xl bg-blue-600 px-2 py-3 text-sm font-semibold text-white hover:bg-blue-700 sm:gap-2 sm:px-5 sm:text-base"
               >
                 <FiRefreshCw />
                 Refresh
@@ -585,7 +585,7 @@ return (
 
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 font-semibold text-white hover:bg-red-700"
+                className="flex min-w-0 items-center justify-center gap-1 rounded-xl bg-red-600 px-2 py-3 text-sm font-semibold text-white hover:bg-red-700 sm:gap-2 sm:px-5 sm:text-base"
               >
                 <FiLogOut />
                 Logout
@@ -594,11 +594,11 @@ return (
           </div>
         </section>
 
-        <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mx-auto min-w-0 max-w-7xl px-4 py-6 sm:px-6 sm:py-10">
           {/* KPI Cards */}
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-3xl bg-white p-8 shadow">
+            <div className="rounded-3xl bg-white p-6 shadow sm:p-8">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-500">Enrollments</p>
@@ -612,7 +612,7 @@ return (
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-8 shadow">
+            <div className="rounded-3xl bg-white p-6 shadow sm:p-8">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-500">Inquiries</p>
@@ -626,7 +626,7 @@ return (
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-8 shadow">
+            <div className="rounded-3xl bg-white p-6 shadow sm:p-8">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-500">Pending</p>
@@ -640,7 +640,7 @@ return (
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-8 shadow">
+            <div className="rounded-3xl bg-white p-6 shadow sm:p-8">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-500">Notifications</p>
@@ -689,8 +689,8 @@ return (
 
           {/* ================= NOTIFICATIONS ================= */}
 
-          <div className="mt-10 rounded-3xl bg-white p-8 shadow">
-            <div className="mb-6 flex items-center justify-between">
+          <div className="mt-10 rounded-3xl bg-white p-5 shadow sm:p-8">
+            <div className="mb-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="text-2xl font-bold text-[#241A8B]">
                   Recent Notifications
@@ -724,12 +724,12 @@ return (
                 {notifications.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-start justify-between rounded-2xl border border-orange-100 bg-orange-50 p-5"
+                    className="flex min-w-0 items-start justify-between gap-3 rounded-2xl border border-orange-100 bg-orange-50 p-4 sm:p-5"
                   >
-                    <div>
+                    <div className="min-w-0">
                       <h4 className="font-bold text-[#241A8B]">{item.title}</h4>
 
-                      <p className="mt-1 text-gray-600">{item.message}</p>
+                      <p className="mt-1 break-words text-gray-600">{item.message}</p>
 
                       <span className="mt-3 inline-block text-xs text-gray-500">
                         {new Date(item.createdAt).toLocaleString()}
@@ -747,8 +747,8 @@ return (
 
           {/* ================= ENROLLMENTS ================= */}
 
-          <div className="mt-10 rounded-3xl bg-white shadow">
-            <div className="flex items-center justify-between border-b px-8 py-6">
+          <div className="mt-10 min-w-0 overflow-hidden rounded-3xl bg-white shadow">
+            <div className="flex items-center justify-between border-b px-5 py-5 sm:px-8 sm:py-6">
               <div>
                 <h3 className="text-2xl font-bold text-[#241A8B]">
                   Program Enrollments
@@ -760,8 +760,8 @@ return (
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="min-w-full">
+            <div className="w-full overflow-x-auto overscroll-x-contain">
+              <table className="w-full min-w-[900px]">
                 <thead className="bg-slate-50">
                   <tr>
                     <th className="px-6 py-4 text-left">Name</th>
@@ -838,8 +838,8 @@ return (
 
           {/* ================= INQUIRIES ================= */}
 
-          <div className="mt-10 rounded-3xl bg-white shadow">
-            <div className="flex items-center justify-between border-b px-8 py-6">
+          <div className="mt-10 min-w-0 overflow-hidden rounded-3xl bg-white shadow">
+            <div className="flex items-center justify-between border-b px-5 py-5 sm:px-8 sm:py-6">
               <div>
                 <h3 className="text-2xl font-bold text-[#241A8B]">
                   Partnership & Contact Inquiries
@@ -851,8 +851,8 @@ return (
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="min-w-full">
+            <div className="w-full overflow-x-auto overscroll-x-contain">
+              <table className="w-full min-w-[1050px]">
                 <thead className="bg-slate-50">
                   <tr>
                     <th className="px-6 py-4 text-left">Contact</th>
@@ -933,10 +933,10 @@ return (
           {/* ================= DETAILS MODAL ================= */}
 
           {showModal && selectedRecord && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6">
-              <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-8 shadow-2xl">
-                <div className="mb-8 flex items-center justify-between">
-                  <h2 className="text-3xl font-black text-[#241A8B]">
+            <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-3 sm:p-6">
+              <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto overflow-x-hidden rounded-3xl bg-white p-5 shadow-2xl sm:p-8">
+                <div className="mb-6 flex items-center justify-between gap-4 sm:mb-8">
+                  <h2 className="text-2xl font-black text-[#241A8B] sm:text-3xl">
                     Record Details
                   </h2>
 
@@ -989,7 +989,7 @@ return (
 
                   <div>
                     <p className="text-sm font-semibold text-gray-500">Email</p>
-                    <p>{selectedRecord.email}</p>
+                    <p className="break-all">{selectedRecord.email}</p>
                   </div>
 
                   <div>
@@ -1015,7 +1015,7 @@ return (
                   <div>
                     <p className="text-sm font-semibold text-gray-500">Message</p>
 
-                    <div className="mt-2 rounded-xl bg-slate-50 p-5 leading-7">
+                    <div className="mt-2 break-words rounded-xl bg-slate-50 p-4 leading-7 sm:p-5">
                       {selectedRecord.message}
                     </div>
                   </div>
