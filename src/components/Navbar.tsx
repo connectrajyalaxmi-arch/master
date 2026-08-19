@@ -138,7 +138,7 @@ return (
       transition={{ duration: 0.6 }}
       className="sticky top-0 z-[100] w-full shrink-0 border-b border-slate-200 bg-white shadow-xl"
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
 
         {/* Logo */}
 
@@ -146,21 +146,21 @@ return (
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => handleNavigate("/")}
-          className="flex items-center gap-4"
+          className="flex min-w-0 items-center gap-2 sm:gap-4"
         >
           <motion.img
             
             src={logo}
             alt="NSFI"
-            className="h-20"
+            className="h-14 w-14 shrink-0 object-contain sm:h-20 sm:w-auto"
           />
 
-          <div>
-            <h2 className="text-2xl font-black text-[#241A8B]">
+          <div className="min-w-0">
+            <h2 className="text-xl font-black text-[#241A8B] sm:text-2xl">
               NSFI
             </h2>
 
-            <p className="text-sm text-gray-500">
+            <p className="max-w-[165px] text-xs leading-4 text-gray-500 sm:max-w-none sm:text-sm sm:leading-normal">
               Forging Future-Ready Talent
             </p>
           </div>
@@ -168,7 +168,7 @@ return (
 
         {/* Desktop Menu */}
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-8 xl:flex">
 
           <button
             onClick={() => handleNavigate("/about")}
@@ -279,7 +279,7 @@ return (
 
         {/* Right Side */}
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 xl:flex">
 
           {isUserLoggedIn ? (
             <>
@@ -333,7 +333,7 @@ return (
 
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="rounded-xl border px-4 py-2 md:hidden"
+          className="shrink-0 rounded-xl border px-3 py-2 xl:hidden"
         >
           ☰
         </button>
@@ -347,7 +347,7 @@ return (
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -25 }}
       transition={{ duration: 0.3 }}
-      className="md:hidden border-t bg-white/95 backdrop-blur-xl shadow-xl"
+      className="border-t bg-white/95 shadow-xl backdrop-blur-xl xl:hidden"
     >
       <div className="space-y-2 p-5">
 
@@ -359,7 +359,7 @@ return (
         </button>
 
         <button
-          onClick={() => handleNavigate("/#about")}
+          onClick={() => handleNavigate("/about")}
           className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
         >
           📖 About
@@ -387,7 +387,7 @@ return (
         </button>
 
         <button
-          onClick={() => handleNavigate("/#contact")}
+          onClick={() => handleNavigate("/contact")}
           className="block w-full rounded-xl px-5 py-4 text-left font-medium transition hover:bg-indigo-50"
         >
           📞 Contact

@@ -42,7 +42,7 @@ const About = () => {
       <Navbar />
       {/* ================= HERO ================= */}
 
-      <section className="relative isolate min-h-[780px] overflow-hidden bg-gradient-to-br from-[#fffdfa] via-white to-[#edf2ff] py-16 text-[#08255e] lg:min-h-[900px] lg:py-24">
+      <section className="relative isolate overflow-hidden bg-gradient-to-br from-[#fffdfa] via-white to-[#edf2ff] py-12 text-[#08255e] sm:py-16 lg:min-h-[900px] lg:py-24 lg:pb-48">
         <div className="absolute left-0 top-0 h-full w-full bg-[radial-gradient(circle_at_15%_18%,rgba(255,255,255,.95),transparent_35%),radial-gradient(circle_at_35%_80%,rgba(218,225,255,.55),transparent_28%)]" />
         <div className="absolute right-0 top-24 hidden h-[68%] w-[48%] overflow-hidden rounded-bl-[45%] border-l-[14px] border-b-[14px] border-white xl:block">
           <img src={aboutImg} alt="Students learning together" className="h-full w-full object-cover object-center" />
@@ -80,7 +80,7 @@ const About = () => {
             </div>
           </motion.div>
 
-          <div className="relative z-10 mt-10 min-h-[240px] max-w-3xl overflow-hidden rounded-[28px] border border-white/90 bg-white/90 p-5 shadow-[0_22px_60px_rgba(8,37,94,.15)] backdrop-blur-xl lg:mt-12 lg:min-h-[285px] lg:p-7">
+          <div className="relative z-10 mt-10 max-w-3xl overflow-hidden rounded-[28px] border border-white/90 bg-white/90 p-5 shadow-[0_22px_60px_rgba(8,37,94,.15)] backdrop-blur-xl lg:mt-12 lg:min-h-[285px] lg:p-7">
             <div className="grid h-full gap-5 sm:grid-cols-3 sm:divide-x sm:divide-slate-200">
               {heroValues.map((item) => (
                 <div key={item.title} className="flex flex-col items-center justify-center px-3 text-center sm:px-5">
@@ -93,8 +93,8 @@ const About = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-5 left-6 right-6 z-10 rounded-[28px] bg-gradient-to-r from-[#08255e] via-[#123b82] to-[#08255e] px-6 py-5 text-white shadow-2xl lg:left-16 lg:right-16 lg:px-10">
-          <div className="flex flex-wrap items-center gap-4 text-lg lg:text-2xl"><span className="flex h-12 w-12 items-center justify-center rounded-full border border-orange-300 text-2xl text-orange-300">◎</span><strong className="text-orange-400">Our Vision:</strong><span>A skilled and empowered tomorrow for all.</span></div>
+        <div className="relative z-10 mx-6 mt-8 rounded-[28px] bg-gradient-to-r from-[#08255e] via-[#123b82] to-[#08255e] px-5 py-5 text-white shadow-2xl lg:absolute lg:bottom-5 lg:left-16 lg:right-16 lg:mx-0 lg:mt-0 lg:px-10">
+          <div className="flex flex-col items-start gap-4 text-lg sm:flex-row sm:flex-wrap sm:items-center lg:text-2xl"><span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-orange-300 text-2xl text-orange-300">◎</span><strong className="text-orange-400">Our Vision:</strong><span>A skilled and empowered tomorrow for all.</span></div>
         </div>
       </section>
 
