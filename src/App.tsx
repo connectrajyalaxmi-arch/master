@@ -17,6 +17,7 @@ import Organizations from "./pages/Organizations";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Faq from "./pages/Faq";
+import SeoManager from "./components/SeoManager";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -47,6 +48,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <SeoManager />
       <main className="app-shell">
       <Routes>
         <Route path="/" element={<Home />} />
