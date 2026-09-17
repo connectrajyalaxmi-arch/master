@@ -1,0 +1,10 @@
+import { useState } from 'react'
+import { FiCheck, FiClock, FiPlus, FiUsers } from 'react-icons/fi'
+import { AddSessionModal } from './AddSessionModal'
+import type { StudioSession } from '../../types'
+
+export function SchedulePage({ sessions, onAddSession, onUpdateSession }: { sessions: StudioSession[]; onAddSession: (session: StudioSession) => Promise<void>; onUpdateSession: (id: string) => Promise<void> }) {
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const upcoming = sessions.filter((session) => session.state === 'Upcoming').length
+  return <div className="feature-page"><section className="page-heading"><div><p className="eyebrow">Thursday, 17 September</p><h1>Today at the studio</h1><p className="heading-copy">Keep the day moving and mark each session as it happens.</p></div><button className="primary-button" onClick={() => setIsAddOpen(true)}><FiPlus /> Add session</button></section><section className="panel schedule-page-panel"><div className="schedule-page-heading"><div><p className="eyebrow">Daily schedule</p><h2>{upcoming} upcoming sessions</h2></div><span className="studio-open-badge"><i /> Studio open</span></div><div className="full-schedule-list">{sessions.map((session) => <article className={`full-session ${session.state === 'Completed' ? 'session-completed' : ''}`} key={session.id}><span className="full-session-time">{session.time}</span><div className={`schedule-line ${session.tone}`} /><div className="full-session-copy"><strong>{session.title}</strong><p>with {session.trainer} · {session.members} members</p></div><button className={`session-action ${session.state === 'Completed' ? 'completed' : ''}`} onClick={() => onUpdateSession(session.id)}><FiCheck /> {session.state}</button></article>)}</div><div className="schedule-note"><FiClock /><span>Keep attendance updated after each class so the daily studio record stays accurate.</span><FiUsers /></div></section>{isAddOpen && <AddSessionModal onClose={() => setIsAddOpen(false)} onSave={onAddSession} />}</div>
+}

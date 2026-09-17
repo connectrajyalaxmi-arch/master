@@ -1,0 +1,15 @@
+import { useState } from 'react'
+import { FiPlus, FiTrendingUp } from 'react-icons/fi'
+import type { Member, ProgressRecord } from '../../types'
+
+export function ProgressPage({ members, records, onAdd }: { members: Member[]; records: ProgressRecord[]; onAdd: (record: ProgressRecord) => Promise<void> }) {
+  const [memberId, setMemberId] = useState(members[0]?.id ?? '')
+  const [weight, setWeight] = useState('')
+  const [goal, setGoal] = useState('Strength')
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
+  const selectedMember = members.find((member) => member.id === memberId)
+  async function submit() { if (!selectedMember || !weight || Number(weight) <= 0) { setError('Select a member and enter a valid weight.'); return } setSaving(true); setSaved(false); setError(''); try { await onAdd({ id: crypto.randomUUID(), memberId, memberName: selectedMember.name, date: new Date().toISOString().slice(0, 10), weight: Number(weight), goal, note: 'Progress check-in' }); setWeight(''); setSaved(true) } catch { setError('Progress could not be saved. Please try again.') } finally { setSaving(false) } }
+  return <div className="feature-page"><section className="page-heading"><div><p className="eyebrow">Member wellness</p><h1>Progress</h1><p className="heading-copy">Track weight, goals and progress check-ins over time.</p></div></section><section className="panel progress-entry"><div className="panel-heading"><div><p className="eyebrow">New check-in</p><h2>Log progress</h2></div><FiTrendingUp className="panel-icon" /></div>{error && <p className="form-error" role="alert">{error}</p>}<div className="form-grid"><label>Member<select value={memberId} onChange={(event) => setMemberId(event.target.value)}>{members.map((member) => <option key={member.id} value={member.id}>{member.name}</option>)}</select></label><label>Weight (kg)<input type="number" min="1" step="0.1" value={weight} onChange={(event) => { setWeight(event.target.value); setSaved(false) }} placeholder="e.g. 62.5" /></label></div><label className="progress-goal">Fitness goal<select value={goal} onChange={(event) => setGoal(event.target.value)}><option>Strength</option><option>Weight loss</option><option>Mobility</option><option>Endurance</option></select></label><button className="primary-button" disabled={saving} onClick={() => void submit()}><FiPlus /> {saving ? 'Saving...' : saved ? 'Saved' : 'Save check-in'}</button></section><section className="panel progress-history"><div className="panel-heading"><div><p className="eyebrow">History</p><h2>Recent progress</h2></div></div>{records.length === 0 ? <p className="empty-copy">No progress check-ins yet.</p> : records.map((record) => <div className="progress-row" key={record.id}><div className="avatar">{record.memberName.split(' ').map((part) => part[0]).join('')}</div><div><strong>{record.memberName}</strong><span>{record.goal} · {record.date}</span></div><b>{record.weight} kg</b></div>)}</section></div>
+}
