@@ -1,106 +1,29 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
-* {
-  box-sizing: border-box;
+:root {
+  --ink: #fffaf5;
+  --paper: #14110f;
+  --cyan: #f58220;
+  --amber: #ff9a3c;
+  --line-light: rgba(232,220,208,.24);
+  --page-gutter: clamp(24px, 7vw, 112px);
+  --body: 'DM Sans', 'Helvetica Neue', sans-serif;
+  --display: var(--body);
+  font-family: var(--body);
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  scroll-behavior: smooth;
 }
 
-body {
-  font-family: "Poppins", sans-serif;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: #333;
-  background: #fffaf6;
-  min-height: 100vh;
-}
-@keyframes floating{
-
-0%{
-transform:translateY(0px);
-}
-
-50%{
-transform:translateY(-14px);
-}
-
-100%{
-transform:translateY(0px);
-}
-
-}
-
-.animate-floating{
-animation:floating 5s ease-in-out infinite;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-.app-shell {
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-
-@media (min-width: 768px) {
-  .app-shell {
-    padding: 32px 32px 64px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .app-shell {
-    padding: 40px 48px 72px;
-  }
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.4px;
-}
-
-button,
-.btn {
-  font-family: inherit;
-  font-weight: 600;
-  border-radius: 0.9rem;
-  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-button:hover,
-.btn:hover {
-  transform: translateY(-1px);
-}
-
-.btn-primary {
-  background: #fb7a1b;
-  color: #ffffff;
-  box-shadow: 0 18px 40px rgba(251, 122, 27, 0.18);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-}
-
-h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.35rem;
-}
-
-p {
-  font-size: 0.9rem;
-  line-height: 1.65;
-}
+* { box-sizing: border-box; }
+body { min-width: 320px; min-height: 100vh; margin: 0; }
+button,input,textarea,select { font: inherit; }
+button,a,input,textarea,select { -webkit-tap-highlight-color: transparent; }
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible { outline: 2px solid #f58220; outline-offset: 3px; }
+#root { min-height: 100vh; }
+::selection { color: #14110f; background: #ff9a3c; }
