@@ -302,6 +302,9 @@ function HomePage() {
         >
           <source src="/images/pillars/new_intro_video1.MP4" type="video/mp4" />
         </video>
+        <video className="intro-background-video-fit intro-motion-video" autoPlay muted playsInline preload="metadata" aria-hidden="true">
+          <source src="/images/pillars/new_intro_video1.MP4" type="video/mp4" />
+        </video>
         <div className="intro-backdrop" aria-hidden="true" />
         <div className="intro-stage">
           <div className="intro-copy">
@@ -409,6 +412,17 @@ function HomePage() {
           </div>
           <a href="#contact">Build your connected operation <ArrowRight size={17} /></a>
         </header>
+        <div className="pillar-mobile-grid" aria-label="Explore Leeoteck capability pillars">
+          {pillarStories.map((pillar, index) => (
+            <a className="pillar-mobile-card" href={pillars[index].route} key={pillar.title}>
+              <video src={pillar.video} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
+              <span className="pillar-mobile-card-shade" aria-hidden="true" />
+              <span className="pillar-mobile-card-index">0{index + 1} / 04</span>
+              <span className="pillar-mobile-card-copy"><span>{pillar.eyebrow}</span><strong>{pillar.title}</strong></span>
+              <ArrowUpRight className="pillar-mobile-card-arrow" size={22} aria-hidden="true" />
+            </a>
+          ))}
+        </div>
         <div className="pillar-network" aria-label="Four connected Leeoteck capability pillars">
           <div className="pillar-bento-grid">
             <article className="pillar-node pillar-node-featured" key={featuredSolution.title}>

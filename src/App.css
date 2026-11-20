@@ -962,6 +962,7 @@
 .intro-experience .brand-intro::before { z-index: 1; inset: 0; opacity: 1; background: linear-gradient(90deg,rgba(7,13,17,.76) 0%,rgba(7,13,17,.58) 43%,rgba(7,13,17,.3) 100%),radial-gradient(ellipse at 84% 48%,rgba(245,130,32,.13),transparent 44%); }
 .intro-experience .brand-intro::after { display: none; }
 .intro-experience .intro-background-video { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .86; filter: brightness(1.22) saturate(.96); background: #101719; }
+.intro-experience .intro-background-video-fit { display: none; }
 .intro-experience .intro-backdrop { z-index: 2; inset: 0; opacity: 1; background: linear-gradient(0deg,rgba(5,10,13,.27),transparent 38%,rgba(5,10,13,.1)); animation: none; }
 .intro-stage { position: relative; z-index: 3; display: grid; width: min(1440px,100%); min-height: 100svh; grid-template-columns: minmax(0,1fr); align-items: center; margin: 0 auto; padding: clamp(120px,14vh,160px) clamp(44px,7vw,96px) clamp(108px,12vh,140px); }
 .intro-experience .intro-copy { max-width: 780px; animation: intro-stage-in 900ms 240ms both cubic-bezier(.2,.75,.25,1); }
@@ -2489,6 +2490,40 @@
 .pillar-node-option.is-active .pillar-node-option-video { opacity: .95; transform: scale(1.04); }
 .pillar-node-option.is-active .pillar-node-option-arrow { transform: translate(2px, -2px); }
 
+/* On phones, show all four pillars as equal cards instead of one expanded feature. */
+.pillar-mobile-grid { display: none; }
+@media (max-width: 700px) {
+  .pillar-mobile-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .pillar-mobile-card {
+    position: relative;
+    display: grid;
+    min-height: 190px;
+    grid-template-columns: minmax(0, 1fr) 28px;
+    align-content: end;
+    align-items: end;
+    gap: 8px 10px;
+    padding: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(232, 245, 247, .2);
+    border-radius: 17px;
+    color: #fff;
+    background: #10212a;
+    text-decoration: none;
+    isolation: isolate;
+  }
+  .pillar-mobile-card > video,.pillar-mobile-card-shade { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; }
+  .pillar-mobile-card > video { object-fit: cover; object-position: center 48%; }
+  .pillar-mobile-card-shade { background: linear-gradient(90deg, rgba(4, 12, 18, .76), rgba(4, 12, 18, .16)), linear-gradient(0deg, rgba(4, 12, 18, .82), transparent 82%); }
+  .pillar-mobile-card-index,.pillar-mobile-card-copy { position: relative; z-index: 1; grid-column: 1; }
+  .pillar-mobile-card-index { align-self: start; margin-bottom: 8px; color: #ffad64; font-size: 9px; font-weight: 700; letter-spacing: .14em; }
+  .pillar-mobile-card-copy { display: grid; gap: 6px; }
+  .pillar-mobile-card-copy > span { color: rgba(232, 245, 247, .84); font-size: 8px; font-weight: 700; letter-spacing: .14em; }
+  .pillar-mobile-card-copy > strong { font-family: var(--display); font-size: clamp(24px, 7vw, 32px); font-weight: 400; line-height: 1.05; }
+  .pillar-mobile-card-arrow { position: relative; z-index: 1; grid-column: 2; grid-row: 2; align-self: end; justify-self: end; color: #ff9a47; }
+  .pillar-mobile-card:focus-visible { outline: 2px solid #ff9a47; outline-offset: 3px; }
+  .pillar-network { display: none; }
+}
+
 .pillar-solution-list { margin: 14px 0 15px; }
 .pillar-solution-label { margin: 0 0 8px !important; color: #ffad64 !important; font-size: 8px !important; font-weight: 700; letter-spacing: .14em; }
 .pillar-solution-list ul { display: grid; max-width: 560px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 20px; margin: 0; padding: 0; list-style: none; }
@@ -2902,4 +2937,52 @@
   .pillar-bento-grid .pillar-node-featured .pillar-node-copy h3 { font-size: clamp(29px, 8.5vw, 36px); }
   .pillar-solution-list li { font-size: 11px; }
   .hero-solutions { right: 5%; left: 5%; }
+}
+
+/* Keep the intro video edge-to-edge on mobile browsers and embedded previews. */
+@media (max-width: 900px) {
+  .site-shell {
+    position: relative;
+    width: 100vw;
+    max-width: none;
+    margin-inline: calc(50% - 50vw);
+  }
+  .site-shell .hero { width: 100%; max-width: none; }
+  .site-shell .site-header { right: 0; left: 0; width: 100%; }
+  .site-shell .hero-banner-image { object-position: 50% center; }
+
+  .intro-experience .brand-intro {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw;
+    max-width: none;
+    min-height: 100dvh;
+    height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  .intro-experience .intro-background-video {
+    inset: 0;
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    object-position: 50% center;
+    opacity: .3;
+    filter: blur(9px) brightness(.72) saturate(.92);
+    transform: scale(1.06);
+  }
+  .intro-experience .intro-background-video-fit {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    opacity: .9;
+    filter: brightness(1.18) saturate(.96);
+    background: transparent;
+  }
 }
