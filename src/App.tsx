@@ -200,6 +200,7 @@ function HomePage() {
   const introTimeLeft = useRef(10000)
   const introTimerStartedAt = useRef(0)
   const introVideoRef = useRef<HTMLVideoElement | null>(null)
+  const introFitVideoRef = useRef<HTMLVideoElement | null>(null)
   const activeSolutionPillar = hoveredSolutionPillar ?? selectedSolutionPillar ?? 0
   const featuredSolution = pillarStories[activeSolutionPillar]
 
@@ -234,6 +235,12 @@ function HomePage() {
   const updateIntroProgress = (video: HTMLVideoElement) => {
     if (!Number.isFinite(video.duration) || video.duration <= 0) return
     setIntroProgress(Math.min(1, Math.max(0, video.currentTime / video.duration)))
+  }
+  const syncIntroVideoLayer = (video: HTMLVideoElement) => {
+    const fitVideo = introFitVideoRef.current
+    if (!fitVideo || fitVideo.readyState < 1) return
+    if (video.videoWidth && video.videoHeight) fitVideo.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`
+    if (Math.abs(fitVideo.currentTime - video.currentTime) > 0.12) fitVideo.currentTime = video.currentTime
   }
 
   useEffect(() => {
@@ -289,20 +296,26 @@ function HomePage() {
         <video ref={introVideoRef} className="intro-background-video intro-motion-video" autoPlay muted={introMuted} playsInline preload="auto" aria-hidden="true"
           onLoadedMetadata={(event) => {
             const durationMs = event.currentTarget.duration * 1000
+            syncIntroVideoLayer(event.currentTarget)
             if (Number.isFinite(durationMs) && durationMs > 0) {
               setIntroDurationMs(durationMs)
               updateIntroProgress(event.currentTarget)
             }
             setIntroMediaReady(true)
           }}
-          onTimeUpdate={(event) => updateIntroProgress(event.currentTarget)}
+          onTimeUpdate={(event) => {
+            updateIntroProgress(event.currentTarget)
+            syncIntroVideoLayer(event.currentTarget)
+          }}
           onSeeked={(event) => updateIntroProgress(event.currentTarget)}
           onError={() => setIntroMediaReady(true)}
           onEnded={() => { setIntroProgress(1); setIntroExiting(true) }}
         >
           <source src="/images/pillars/new_intro_video1.MP4" type="video/mp4" />
         </video>
-        <video className="intro-background-video-fit intro-motion-video" autoPlay muted playsInline preload="metadata" aria-hidden="true">
+        <video ref={introFitVideoRef} className="intro-background-video-fit intro-motion-video" autoPlay muted playsInline preload="metadata" aria-hidden="true"
+          onLoadedMetadata={(event) => syncIntroVideoLayer(introVideoRef.current ?? event.currentTarget)}
+        >
           <source src="/images/pillars/new_intro_video1.MP4" type="video/mp4" />
         </video>
         <div className="intro-backdrop" aria-hidden="true" />
